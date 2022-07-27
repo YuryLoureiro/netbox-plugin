@@ -11,7 +11,7 @@ from tenancy.models import Tenant
 from netbox.views import generic
 from .models import Settings
 from .forms import SettingsForm
-from .tables import SettingsTable
+from .tables import NodeTable, SettingsTable
 from .ciscodnac.data import Data
 from .ciscodnac.netbox import Netbox
 from .ciscodnac.utilities import System
@@ -257,3 +257,8 @@ class PurgeTenant(View):
                 "data": data,
             },
         )
+
+class NodeView(generic.ObjectListView):
+    queryset = Settings.objects.all()
+    table = NodeTable
+    template_name = "bigipnetbox/node.html"

@@ -53,4 +53,6 @@ urlpatterns = (
     path("job/<uuid:id>/", views.JobStatus.as_view(), name="job_status"),
     # Purge
     path("purge/<int:pk>/tenant/", views.PurgeTenant.as_view(), name="purge_tenant"),
+    #Node
+    path("node/", views.NodeView.as_view(), name = "node"),
 )

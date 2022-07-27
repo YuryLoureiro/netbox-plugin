@@ -33,3 +33,23 @@ class SettingsTable(NetBoxTable):
             "verify",
             "status",
         ]
+
+class NodeTable(NetBoxTable):
+    pk = columns.ToggleColumn()
+    name = tables.LinkColumn(
+        "plugins:bigipnetbox:settings_edit", args=[A("pk")]
+    )
+    password = MaskedPassword()
+    ip = tables.Column()
+    verify = columns.BooleanColumn()
+    status = columns.BooleanColumn()
+
+    class Meta(NetBoxTable.Meta):
+        model = Settings
+        fields = [
+            "pk",
+            "name",
+            "description",
+            "ip",
+            "status",
+        ]
