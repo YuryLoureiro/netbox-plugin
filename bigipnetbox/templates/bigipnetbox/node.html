@@ -3,16 +3,16 @@
 {% load render_table from django_tables2 %}
 
 {% block title %}
-BigIP Node infos
+<li><a href="{% url 'plugins:bigipnetbox:node' %}">BigIP Node infos</a></li>
 {% endblock %}
 {% block breadcrumbs %}
-<li class="breadcrumb-item">BigIP Node infos</li>
+<li><a href="{% url 'plugins:bigipnetbox:node' %}">BigIP Node infos</a></li>
 {% endblock %}
 
 {{% block extra_controls %}
 {% endblock extra_controls %}
 
-{% block content %}
+{% block content-wrapper %}
 <div class="row mb-3">
     <div class="col col-md-12">
       <div class="card">
@@ -23,4 +23,4 @@ BigIP Node infos
       </div>
     </div>
   </div>
-  {% endblock %}
+{% endblock %}

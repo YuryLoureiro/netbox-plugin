@@ -1,7 +1,7 @@
 from django.urls import path
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from .models import Settings
+from .models import Node, Settings
 
 app_name = "bigipnetbox"
 
@@ -20,7 +20,7 @@ urlpatterns = (
         views.SettingsDeleteBulk.as_view(),
         name="settings_delete_bulk",
     ),
-    path("settings/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="settings_changelog", kwargs={"model": Settings}),
+    path("node/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="node_changelog", kwargs={"model": Node}),
     # Status
     path("status/", views.StatusView.as_view(), name="status"),
     # Tenant Data
@@ -53,15 +53,13 @@ urlpatterns = (
     path("job/<uuid:id>/", views.JobStatus.as_view(), name="job_status"),
     # Purge
     path("purge/<int:pk>/tenant/", views.PurgeTenant.as_view(), name="purge_tenant"),
+
+    
     #Node
     path("node/", views.NodeView.as_view(), name = "node"),
     path("node/add/", views.NodeEdit.as_view(), name="node_add"),
-    path("node/<int:node_name>/edit/", views.NodeEdit.as_view(), name="node_edit"),
-    path(
-        "settings/<int:node_name>/delete/",
-        views.nodeDelete.as_view(),
-        name="node_delete",
-    ),
+    path("node/<int:pk>/edit/", views.NodeEdit.as_view(), name="node_edit"),
+    path("settings/<int:pk>/delete/", views.NodeDelete.as_view(), name="node_delete",),
     path(
         "node/delete/",
         views.NodeDeleteBulk.as_view(),
