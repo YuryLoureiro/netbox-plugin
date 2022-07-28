@@ -55,4 +55,16 @@ urlpatterns = (
     path("purge/<int:pk>/tenant/", views.PurgeTenant.as_view(), name="purge_tenant"),
     #Node
     path("node/", views.NodeView.as_view(), name = "node"),
+    path("node/add/", views.NodeEdit.as_view(), name="node_add"),
+    path("node/<int:node_name>/edit/", views.NodeEdit.as_view(), name="node_edit"),
+    path(
+        "settings/<int:node_name>/delete/",
+        views.nodeDelete.as_view(),
+        name="node_delete",
+    ),
+    path(
+        "node/delete/",
+        views.NodeDeleteBulk.as_view(),
+        name="node_delete_bulk",
+    ),
 )

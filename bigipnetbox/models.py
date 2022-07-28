@@ -47,8 +47,8 @@ class NodeChoices(ChoiceSet):
         (STATUS_DEPRECATED, 'Deprecated', 'red'),
     )
 
-class Node(models.Model):
-    Node_name = models.CharField(
+class Node(ChangeLoggingMixin,models.Model):
+    node_name = models.CharField(
         max_length=200
     )
     fk_NETBOX_IpAdress = models.OneToOneField(
@@ -66,6 +66,15 @@ class Node(models.Model):
         choices=NodeChoices,
         default=NodeChoices.STATUS_ACTIVE
     )
+    objects = RestrictedQuerySet.as_manager()
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["node_name"]
+    def __str__(self):
+        return self.node_name
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:node")
 
 class Pool(models.Model):
     Nome_pool = models.CharField(

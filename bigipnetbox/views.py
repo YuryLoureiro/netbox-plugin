@@ -9,8 +9,8 @@ from django.views.generic import View
 from utilities.forms import ConfirmationForm
 from tenancy.models import Tenant
 from netbox.views import generic
-from .models import Settings
-from .forms import SettingsForm
+from .models import Settings,Node
+from .forms import NodeForm, SettingsForm
 from .tables import NodeTable, SettingsTable
 from .ciscodnac.data import Data
 from .ciscodnac.netbox import Netbox
@@ -22,8 +22,8 @@ class SettingsView(generic.ObjectListView):
     Cisco DNA Center Settings
     """
 
-    queryset = Settings.objects.all()
-    table = SettingsTable
+    queryset = Node.objects.all()
+    table = NodeTable
     template_name = "bigipnetbox/settings.html"
 
 
@@ -32,8 +32,8 @@ class SettingsEdit(generic.ObjectEditView):
     Add/Edit Cisco DNA Center Settings
     """
 
-    queryset = Settings.objects.all()
-    form = SettingsForm
+    queryset = Node.objects.all()
+    form = NodeForm
     template_name = "bigipnetbox/settings_edit.html"
 
 
@@ -258,7 +258,40 @@ class PurgeTenant(View):
             },
         )
 
+
+
 class NodeView(generic.ObjectListView):
-    queryset = Settings.objects.all()
+
+    """
+    Node
+    """
+    queryset = Node.objects.all()
     table = NodeTable
     template_name = "bigipnetbox/node.html"
+
+class NodeEdit(generic.ObjectEditView):
+
+    """
+    Add/Edit Node
+    """
+
+    queryset = Node.objects.all()
+    form = NodeForm
+    template_name = "bigipnetbox/settings_edit.html"
+
+
+class NodeDelete(generic.ObjectDeleteView):
+    """
+    Delete Node
+    """
+
+    queryset = Node.objects.all()
+
+
+class NodeDeleteBulk(generic.BulkDeleteView):
+    """
+    Delete multiple Nodes
+    """
+
+    queryset = Node.objects.all()
+    table = NodeTable

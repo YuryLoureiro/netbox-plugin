@@ -2,7 +2,7 @@ import django_tables2 as tables
 from django_tables2.utils import A
 from django.utils.safestring import mark_safe
 from netbox.tables import NetBoxTable, columns
-from .models import Settings
+from .models import Settings,Node
 
 
 class MaskedPassword(tables.Column):
@@ -35,21 +35,16 @@ class SettingsTable(NetBoxTable):
         ]
 
 class NodeTable(NetBoxTable):
-    pk = columns.ToggleColumn()
-    name = tables.LinkColumn(
-        "plugins:bigipnetbox:settings_edit", args=[A("pk")]
-    )
-    password = MaskedPassword()
-    ip = tables.Column()
-    verify = columns.BooleanColumn()
-    status = columns.BooleanColumn()
+    node_name = tables.Column()
+    fk_NETBOX_IpAdress = tables.Column()
+    description = tables.Column()
+    estado = tables.Column()
 
     class Meta(NetBoxTable.Meta):
-        model = Settings
+        model = Node
         fields = [
-            "pk",
-            "name",
+            "node_name",
+            "fk_NETBOX_IpAdress",
             "description",
-            "ip",
-            "status",
+            "estado",
         ]

@@ -1,6 +1,7 @@
+from tkinter import NE
 from utilities.forms import StaticSelect
 from netbox.forms import NetBoxModelForm
-from .models import Settings
+from .models import Settings,Node
 
 class SettingsForm(NetBoxModelForm):
     class Meta:
@@ -27,3 +28,13 @@ class SettingsForm(NetBoxModelForm):
                 )
             ),
         }
+
+class NodeForm(NetBoxModelForm):
+    class Meta:
+        model = Node
+        fields = [
+            "node_name",
+            "fk_NETBOX_IpAdress",
+            "description",
+            "estado",
+        ]
