@@ -93,6 +93,7 @@ class Virtual_Server(models.Model):
     )
     fk_Nome_pool = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
     fk_virtual_address = models.ForeignKey(to='Virtual_Address', on_delete = models.SET_NULL, null=True, blank = True)
+    objects = RestrictedQuerySet.as_manager()
 
 class Virtual_Address(models.Model):
     pk_virtual_addess = models.CharField(
