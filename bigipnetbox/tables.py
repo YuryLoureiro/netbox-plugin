@@ -46,7 +46,7 @@ class VirtualServerTable(NetBoxTable):
     porta = tables.Column(verbose_name = "Porta")
 
     class Meta(NetBoxTable.Meta):
-        model = Pool
+        model = Virtual_Server
         fields = [
             "pk",
             "virtual_server_name",
