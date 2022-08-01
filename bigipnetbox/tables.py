@@ -3,7 +3,7 @@ import django_tables2 as tables
 from django_tables2.utils import A
 from django.utils.safestring import mark_safe
 from netbox.tables import NetBoxTable, columns
-from .models import Node,Pool
+from .models import Node,Pool, Virtual_Server
 
 class NodeTable(NetBoxTable):
     pk = columns.ToggleColumn()
@@ -37,6 +37,21 @@ class PoolTable(NetBoxTable):
             "AllowNat",
             "AllowSNat",
             "description",
+        ]
+
+class VirtualServerTable(NetBoxTable):
+    pk = columns.ToggleColumn()
+    virtual_server_name = tables.Column(verbose_name = "Nome Virtual Server")
+    mask = tables.Column(verbose_name = "Mascara")
+    porta = tables.Column(verbose_name = "Porta")
+
+    class Meta(NetBoxTable.Meta):
+        model = Pool
+        fields = [
+            "pk",
+            "virtual_server_name",
+            "mask",
+            "porta",
         ]
 
 

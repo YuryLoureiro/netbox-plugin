@@ -1,14 +1,15 @@
 from django.urls import path
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from .models import Node
+from .models import Node, Pool, Virtual_Server
 
 app_name = "bigipnetbox"
 
 urlpatterns = (
     #Node
-    path("node/", views.NodeView.as_view(), name="node"),
+    path("node/", views.NodeListView.as_view(), name="node_list"),
     path("node/add/", views.NodeEdit.as_view(), name="node_add"),
+    path("node/<int:pk>/", views.NodeView.as_view(), name="node"),
     path("node/<int:pk>/edit/", views.NodeEdit.as_view(), name="node_edit"),
     path(
         "node/<int:pk>/delete/",
@@ -21,6 +22,38 @@ urlpatterns = (
         name="node_delete_bulk",
     ),
     path("node/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="node_changelog", kwargs={"model": Node}),
+    #Pool
+    path("pool/", views.PoolListView.as_view(), name="pool_list"),
+    path("pool/add/", views.PoolEdit.as_view(), name="pool_add"),
+    #path("Pool/<int:pk>/", views.PoolView.as_view(), name="pool"),
+    path("pool/<int:pk>/edit/", views.PoolEdit.as_view(), name="pool_edit"),
+    path(
+        "pool/<int:pk>/delete/",
+        views.PoolDelete.as_view(),
+        name="pool_delete",
+    ),
+    path(
+        "pool/delete/",
+        views.PoolDeleteBulk.as_view(),
+        name="pool_delete_bulk",
+    ),
+    path("pool/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="pool_changelog", kwargs={"model": Pool}),
+    #VirtualServer
+    path("virtualserver/", views.VirtualServerListView.as_view(), name="virtualserver_list"),
+    path("virtualserver/add/", views.VirtualServerEdit.as_view(), name="virtualserver_add"),
+    #path("virtualserver/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("virtualserver/<int:pk>/edit/", views.VirtualServerEdit.as_view(), name="virtualserver_edit"),
+    path(
+        "virtualserver/<int:pk>/delete/",
+        views.VirtualServerDelete.as_view(),
+        name="virtualserver_delete",
+    ),
+    path(
+        "virtualserver/delete/",
+        views.VirtualServerDeleteBulk.as_view(),
+        name="virtualserver_delete_bulk",
+    ),
+    path("virtualserver/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="virtualserver_changelog", kwargs={"model": Virtual_Server}),
 )
 
 

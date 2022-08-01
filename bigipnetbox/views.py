@@ -7,12 +7,20 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View
 from netbox.views import generic
-from .models import Node,Pool,Pool_membro
-from .forms import  NodeForm
-from .tables import NodeTable, PoolTable
+from .models import Node,Pool,Pool_membro, Virtual_Server
+from .forms import  NodeForm, PoolForm, VirtualServerForm
+from .tables import NodeTable, PoolTable, VirtualServerTable
+from .filters import NodeFilterSet
+from .forms import NodeFilterForm
 
 #Node
-class NodeView(generic.ObjectListView):
+class NodeListView(generic.ObjectListView):
+    queryset = Node.objects.all()
+    table = NodeTable
+    filterset = NodeFilterSet
+    filterset_form = NodeFilterForm
+
+class NodeView(generic.ObjectView):
     queryset = Node.objects.all()
     table = NodeTable
 
@@ -29,6 +37,50 @@ class NodeDelete(generic.ObjectDeleteView):
 class NodeDeleteBulk(generic.BulkDeleteView):
     queryset = Node.objects.all()
     table = NodeTable
+
+class PoolListView(generic.ObjectListView):
+    queryset = Pool.objects.all()
+    table = PoolTable
+
+class PoolView(generic.ObjectView):
+    queryset = Pool.objects.all()
+    table = PoolTable
+
+
+class PoolEdit(generic.ObjectEditView):
+    queryset = Pool.objects.all()
+    form = PoolForm
+
+
+class PoolDelete(generic.ObjectDeleteView):
+    queryset = Pool.objects.all()
+
+
+class PoolDeleteBulk(generic.BulkDeleteView):
+    queryset = Pool.objects.all()
+    table = PoolTable
+
+class VirtualServerListView(generic.ObjectListView):
+    queryset = Virtual_Server.objects.all()
+    table = VirtualServerTable
+
+class VirtualServerView(generic.ObjectView):
+    queryset = Virtual_Server.objects.all()
+    table = VirtualServerTable
+
+
+class VirtualServerEdit(generic.ObjectEditView):
+    queryset = Virtual_Server.objects.all()
+    form = VirtualServerForm
+
+
+class VirtualServerDelete(generic.ObjectDeleteView):
+    queryset = Virtual_Server.objects.all()
+
+
+class VirtualServerDeleteBulk(generic.BulkDeleteView):
+    queryset = Virtual_Server.objects.all()
+    table = VirtualServerTable
 
 
 
