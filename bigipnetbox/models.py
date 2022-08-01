@@ -2,38 +2,7 @@ from django.db import models
 from django.urls import reverse
 from utilities.querysets import RestrictedQuerySet
 from netbox.models.features import ChangeLoggingMixin
-
 from utilities.choices import ChoiceSet
-
-
-class Settings(ChangeLoggingMixin, models.Model):
-    created = models.DateTimeField(
-            auto_now_add=True,
-            blank=True,
-            null=True
-        )
-    last_updated = models.DateTimeField(
-        auto_now=True,
-        blank=True,
-        null=True
-    )
-    hostname = models.CharField(max_length=2000, unique=True, blank=True, null=True)
-    username = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    version = models.CharField(max_length=10)
-    verify = models.BooleanField(default=False)
-    status = models.BooleanField(default=True)
-    objects = RestrictedQuerySet.as_manager()
-
-    class Meta:
-        app_label = "bigipnetbox"
-        ordering = ["hostname"]
-
-    def __str__(self):
-        return self.hostname
-
-    def get_absolute_url(self):
-        return reverse("plugins:bigipnetbox:settings")
 
 class NodeChoices(ChoiceSet):
 
@@ -66,6 +35,7 @@ class Node(models.Model):
         choices=NodeChoices,
         default=NodeChoices.STATUS_ACTIVE
     )
+    objects = RestrictedQuerySet.as_manager()
 
 class Pool(models.Model):
     Nome_pool = models.CharField(
@@ -82,6 +52,17 @@ class Pool(models.Model):
         blank=True
     )
     fk_POOL_MEMBRO_Nome = models.ForeignKey(to='Pool_membro', on_delete = models.SET_NULL, null=True, blank = True)
+    objects = RestrictedQuerySet.as_manager()
+
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["Nome_pool"]
+
+    def __str__(self):
+        return self.Nome_pool
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:Pool")
 
 
 class Pool_membro(models.Model):
@@ -89,6 +70,16 @@ class Pool_membro(models.Model):
         max_length=200
     )
     fk_NODE_Node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
+
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["nome_membro"]
+
+    def __str__(self):
+        return self.nome_membro
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:Pool_membro")
 
 class Virtual_Server(models.Model):
     virtual_server_name = models.CharField(
@@ -125,3 +116,41 @@ class Cluster_Big(models.Model):
     fk_NETBOX_Device = models.ForeignKey(to='dcim.Device', on_delete = models.SET_NULL, null=True, blank = True)
     fk_NODE_Node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
     fk_VIRTUAL_SERVER_virtual = models.ForeignKey(to='Virtual_Server', on_delete = models.SET_NULL, null=True, blank = True)
+
+
+
+
+
+
+
+
+
+""" class Settings(ChangeLoggingMixin, models.Model):
+    created = models.DateTimeField(
+            auto_now_add=True,
+            blank=True,
+            null=True
+        )
+    last_updated = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+        null=True
+    )
+    hostname = models.CharField(max_length=2000, unique=True, blank=True, null=True)
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+    version = models.CharField(max_length=10)
+    verify = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
+    objects = RestrictedQuerySet.as_manager()
+
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["hostname"]
+
+    def __str__(self):
+        return self.hostname
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:settings")
+ """

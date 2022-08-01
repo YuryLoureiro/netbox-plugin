@@ -8,11 +8,11 @@ class MyModel1Admin(admin.ModelAdmin):
     fields = '__all__'
 """
 from django.contrib import admin
-from .models import Settings
+from .models import Node
 
 """ Admin view for Settings """
 
 
-@admin.register(Settings)
+@admin.register(Node)
 class BigIPNetboxAdmin(admin.ModelAdmin):
-    list_display = ("hostname", "username", "status")
+    list_display = ("Node_name","description","estado")
