@@ -1,6 +1,6 @@
 
 from netbox.forms import NetBoxModelForm
-from .models import Node, Pool, NodeChoices, Virtual_Server
+from .models import Node, Pool, NodeChoices, VirtualAddress, VirtualServer
 
 import re
 
@@ -42,8 +42,8 @@ class NodeForm(NetBoxModelForm):
     class Meta:
         model = Node
         fields = [
-            "Node_name",
-            "fk_NETBOX_IpAdress",
+            "node_name",
+            "fk_Netbox_ipaddress",
             "description",
             "estado",
         ]
@@ -52,15 +52,16 @@ class PoolForm(NetBoxModelForm):
     class Meta:
         model = Pool
         fields = [
-            "Nome_pool",
-            "AllowNat",
-            "AllowSNat",
+            "nome_pool",
+            "allownat",
+            "allowsnat",
             "description",
+            "fk_PoolMembro_nome",
         ]
 
 class VirtualServerForm(NetBoxModelForm):
     class Meta:
-        model = Virtual_Server
+        model = VirtualServer
         fields = [
             "virtual_server_name",
             "mask",
@@ -68,6 +69,15 @@ class VirtualServerForm(NetBoxModelForm):
         ]
 
 
+class VirtualAddressForm(NetBoxModelForm):
+    class Meta:
+        model = VirtualAddress
+        fields = [
+            "ip_virtual_address",
+            "partition",
+            "campo",
+            "fk_Node_node_nome",
+        ]
 
 
 """ class SettingsForm(NetBoxModelForm):

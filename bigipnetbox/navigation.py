@@ -33,4 +33,9 @@ menu_items = (
         link_text="Virtual Server",
         permissions=["bigipnetbox.admin_full"],
         ),
+    PluginMenuItem(
+        link="plugins:bigipnetbox:virtualaddress_list",
+        link_text="Virtual Address",
+        permissions=["bigipnetbox.admin_full"],
+        ),
     )

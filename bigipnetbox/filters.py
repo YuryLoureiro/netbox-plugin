@@ -17,7 +17,7 @@ class NodeFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Node
-        fields = ['Node_name', 'fk_NETBOX_IpAdress', 'description', 'estado']
+        fields = ['node_name', 'fk_Netbox_ipaddress', 'description', 'estado']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""

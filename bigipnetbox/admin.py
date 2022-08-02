@@ -15,4 +15,4 @@ from .models import Node
 
 @admin.register(Node)
 class BigIPNetboxAdmin(admin.ModelAdmin):
-    list_display = ("Node_name","description","estado")
+    list_display = ("node_name","description","estado")

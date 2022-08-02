@@ -7,9 +7,10 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View
 from netbox.views import generic
-from .models import Node,Pool,Pool_membro, Virtual_Server
-from .forms import  NodeForm, PoolForm, VirtualServerForm
-from .tables import NodeTable, PoolTable, VirtualServerTable
+
+from .models import Node,Pool,PoolMembro, VirtualServer,VirtualAddress
+from .forms import  NodeForm, PoolForm, VirtualServerForm, VirtualAddressForm
+from .tables import NodeTable, PoolTable, VirtualServerTable, VirtualAddressTable
 from .filters import NodeFilterSet
 from .forms import NodeFilterForm
 
@@ -38,6 +39,7 @@ class NodeDeleteBulk(generic.BulkDeleteView):
     queryset = Node.objects.all()
     table = NodeTable
 
+#POOL
 class PoolListView(generic.ObjectListView):
     queryset = Pool.objects.all()
     table = PoolTable
@@ -60,30 +62,51 @@ class PoolDeleteBulk(generic.BulkDeleteView):
     queryset = Pool.objects.all()
     table = PoolTable
 
+#Virtual Server
 class VirtualServerListView(generic.ObjectListView):
-    queryset = Virtual_Server.objects.all()
+    queryset = VirtualServer.objects.all()
     table = VirtualServerTable
 
 class VirtualServerView(generic.ObjectView):
-    queryset = Virtual_Server.objects.all()
+    queryset = VirtualServer.objects.all()
     table = VirtualServerTable
 
 
 class VirtualServerEdit(generic.ObjectEditView):
-    queryset = Virtual_Server.objects.all()
+    queryset = VirtualServer.objects.all()
     form = VirtualServerForm
 
 
 class VirtualServerDelete(generic.ObjectDeleteView):
-    queryset = Virtual_Server.objects.all()
+    queryset = VirtualServer.objects.all()
 
 
 class VirtualServerDeleteBulk(generic.BulkDeleteView):
-    queryset = Virtual_Server.objects.all()
+    queryset = VirtualServer.objects.all()
     table = VirtualServerTable
 
+#Virtual Adress
+class VirtualAddressListView(generic.ObjectListView):
+    queryset = VirtualAddress.objects.all()
+    table = VirtualAddressTable
+
+class VirtualAddressView(generic.ObjectView):
+    queryset = VirtualAddress.objects.all()
+    table = VirtualAddressTable
 
 
+class VirtualAddressEdit(generic.ObjectEditView):
+    queryset = VirtualAddress.objects.all()
+    form = VirtualAddressForm
+
+
+class VirtualAddressDelete(generic.ObjectDeleteView):
+    queryset = VirtualAddress.objects.all()
+
+
+class VirtualAddressDeleteBulk(generic.BulkDeleteView):
+    queryset = VirtualAddress.objects.all()
+    table = VirtualAddressTable
 
 
 
