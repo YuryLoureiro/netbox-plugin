@@ -24,7 +24,7 @@ class NodeFilterSet(django_filters.FilterSet):
         if not value.strip():
             return queryset
         qs_filter = (
-                Q(id__icontains=value)
-                | Q(node_name__icontains=value)
+                #Q(id__icontains=value)
+                Q(node_name__icontains=value)
         )
         return queryset.filter(qs_filter)
