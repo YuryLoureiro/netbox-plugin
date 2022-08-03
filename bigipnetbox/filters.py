@@ -11,7 +11,7 @@ from .models import Node
 class NodeFilterSet(django_filters.FilterSet):
     q = django_filters.CharFilter(
         method='search',
-        label='Name',
+        label='Search',
     )
     #tag = TagFilter()
 
@@ -25,6 +25,6 @@ class NodeFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 Q(id__icontains=value)
-                | Q(description__icontains=value)
+                | Q(node_name__icontains=value)
         )
         return queryset.filter(qs_filter)

@@ -26,9 +26,9 @@ from django.forms.widgets import TextInput
 
 class NodeFilterForm(NetBoxModelFilterSetForm):
     model = Node
-    Node_name = forms.CharField(
+    q = forms.CharField(
         required=False,
-        label='Name'
+        label='Search'
     )
     estado = forms.MultipleChoiceField(
         choices=NodeChoices,
