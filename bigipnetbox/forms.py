@@ -36,6 +36,42 @@ class NodeFilterForm(NetBoxModelFilterSetForm):
         widget=StaticSelectMultiple()
     )
 
+class PoolFilterForm(NetBoxModelFilterSetForm):
+    model = Pool
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
+
+class PoolMembroFilterForm(NetBoxModelFilterSetForm):
+    model = PoolMembro
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
+
+class VirtualServerFilterForm(NetBoxModelFilterSetForm):
+    model = VirtualServer
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
+
+class VirtualAddressFilterForm(NetBoxModelFilterSetForm):
+    model = VirtualAddress
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
+
+class ClusterBigFilterForm(NetBoxModelFilterSetForm):
+    model = ClusterBig
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
+
+
     #tag = TagFilterField(model)
 
 class NodeForm(NetBoxModelForm):
