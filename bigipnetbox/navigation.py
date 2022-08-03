@@ -38,4 +38,14 @@ menu_items = (
         link_text="Virtual Address",
         permissions=["bigipnetbox.admin_full"],
         ),
+    PluginMenuItem(
+        link="plugins:bigipnetbox:poolmembro_list",
+        link_text="Pool Membro",
+        permissions=["bigipnetbox.admin_full"],
+        ),
+    PluginMenuItem(
+        link="plugins:bigipnetbox:clusterbig_list",
+        link_text="Cluster",
+        permissions=["bigipnetbox.admin_full"],
+        ),
     )

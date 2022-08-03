@@ -8,9 +8,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View
 from netbox.views import generic
 
-from .models import Node,Pool,PoolMembro, VirtualServer,VirtualAddress
-from .forms import  NodeForm, PoolForm, VirtualServerForm, VirtualAddressForm
-from .tables import NodeTable, PoolTable, VirtualServerTable, VirtualAddressTable
+from .models import *
+from .forms import  *
+from .tables import *
 from .filters import NodeFilterSet
 from .forms import NodeFilterForm
 
@@ -109,6 +109,52 @@ class VirtualAddressDeleteBulk(generic.BulkDeleteView):
     table = VirtualAddressTable
 
 
+#Pool Member
+class PoolMembroListView(generic.ObjectListView):
+    queryset = PoolMembro.objects.all()
+    table = PoolMembroTable
+
+class PoolMembroView(generic.ObjectView):
+    queryset = PoolMembro.objects.all()
+    table = PoolMembroTable
+
+
+class PoolMembroEdit(generic.ObjectEditView):
+    queryset = PoolMembro.objects.all()
+    form = PoolMembroForm
+
+
+class PoolMembroDelete(generic.ObjectDeleteView):
+    queryset = PoolMembro.objects.all()
+
+
+class PoolMembroDeleteBulk(generic.BulkDeleteView):
+    queryset = PoolMembro.objects.all()
+    table = PoolMembroTable
+
+
+#CLUSTER
+class ClusterBigListView(generic.ObjectListView):
+    queryset = ClusterBig.objects.all()
+    table = ClusterBigTable
+
+class ClusterBigView(generic.ObjectView):
+    queryset = ClusterBig.objects.all()
+    table = ClusterBigTable
+
+
+class ClusterBigEdit(generic.ObjectEditView):
+    queryset = ClusterBig.objects.all()
+    form = ClusterBigForm
+
+
+class ClusterBigDelete(generic.ObjectDeleteView):
+    queryset = ClusterBig.objects.all()
+
+
+class ClusterBigDeleteBulk(generic.BulkDeleteView):
+    queryset = ClusterBig.objects.all()
+    table = ClusterBigTable
 
 
 

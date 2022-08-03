@@ -1,12 +1,14 @@
 from django.urls import path
 from netbox.views.generic import ObjectChangeLogView
 from . import views
-from .models import Node, Pool, VirtualServer,VirtualAddress
+from .models import *
 
 app_name = "bigipnetbox"
 
 urlpatterns = (
-    #Node
+
+
+    ######Node
     path("node/", views.NodeListView.as_view(), name="node_list"),
     path("node/add/", views.NodeEdit.as_view(), name="node_add"),
     path("node/<int:pk>/", views.NodeView.as_view(), name="node"),
@@ -23,7 +25,12 @@ urlpatterns = (
     ),
     path("node/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="node_changelog", kwargs={"model": Node}),
 
-    #Pool
+
+
+    #######
+    # Pool
+    ########
+
     path("pool/", views.PoolListView.as_view(), name="pool_list"),
     path("pool/add/", views.PoolEdit.as_view(), name="pool_add"),
     #path("Pool/<int:pk>/", views.PoolView.as_view(), name="pool"),
@@ -40,7 +47,12 @@ urlpatterns = (
     ),
     path("pool/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="pool_changelog", kwargs={"model": Pool}),
 
-    #VirtualServer
+
+
+    #########
+    # VirtualServer
+    #########
+
     path("virtualserver/", views.VirtualServerListView.as_view(), name="virtualserver_list"),
     path("virtualserver/add/", views.VirtualServerEdit.as_view(), name="virtualserver_add"),
     #path("virtualserver/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
@@ -57,7 +69,12 @@ urlpatterns = (
     ),
     path("virtualserver/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="virtualserver_changelog", kwargs={"model": VirtualServer}),
 
-    #virtualAddress
+
+
+    ######
+    # virtualAddress
+    ########
+
     path("virtualaddress/", views.VirtualAddressListView.as_view(), name="virtualaddress_list"),
     path("virtualaddress/add/", views.VirtualAddressEdit.as_view(), name="virtualaddress_add"),
     #path("virtualaddress/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
@@ -73,8 +90,49 @@ urlpatterns = (
         name="virtualaddress_delete_bulk",
     ),
     path("virtualaddress/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="virtualaddress_changelog", kwargs={"model": VirtualAddress}),
-)
 
+
+
+    ######
+    # PoolMembro
+    ######
+
+    path("poolmembro/", views.PoolMembroListView.as_view(), name="poolmembro_list"),
+    path("poolmembro/add/", views.PoolMembroEdit.as_view(), name="poolmembro_add"),
+    #path("poolmembro/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("poolmembro/<int:pk>/edit/", views.PoolMembroEdit.as_view(), name="poolmembro_edit"),
+    path(
+        "poolmembro/<int:pk>/delete/",
+        views.PoolMembroDelete.as_view(),
+        name="poolmembro_delete",
+    ),
+    path(
+        "poolmembro/delete/",
+        views.PoolMembroDeleteBulk.as_view(),
+        name="poolmembro_delete_bulk",
+    ),
+    path("poolmembro/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="poolmembro_changelog", kwargs={"model": PoolMembro}),
+
+    #######
+    # CLUSTER
+    ######
+
+    path("clusterbig/", views.ClusterBigListView.as_view(), name="clusterbig_list"),
+    path("clusterbig/add/", views.ClusterBigEdit.as_view(), name="clusterbig_add"),
+    #path("poolmembro/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("clusterbig/<int:pk>/edit/", views.ClusterBigEdit.as_view(), name="clusterbig_edit"),
+    path(
+        "clusterbig/<int:pk>/delete/",
+        views.ClusterBigDelete.as_view(),
+        name="clusterbig_delete",
+    ),
+    path(
+        "clusterbig/delete/",
+        views.ClusterBigDeleteBulk.as_view(),
+        name="clusterbig_delete_bulk",
+    ),
+    path("clusterbig/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="clusterbig_changelog", kwargs={"model": ClusterBig}),
+)
 
 
 

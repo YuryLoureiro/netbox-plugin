@@ -37,6 +37,18 @@ class Node(models.Model):
     )
     objects = RestrictedQuerySet.as_manager()
 
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["node_name"]
+
+    def __str__(self):
+        return self.node_name
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:node_list")
+
+
+
 class Pool(models.Model):
     nome_pool = models.CharField(
         max_length=200
@@ -62,7 +74,9 @@ class Pool(models.Model):
         return self.nome_pool
 
     def get_absolute_url(self):
-        return reverse("plugins:bigipnetbox:Pool")
+        return reverse("plugins:bigipnetbox:pool_list")
+
+
 
 
 class PoolMembro(models.Model):
@@ -70,7 +84,7 @@ class PoolMembro(models.Model):
         max_length=200
     )
     fk_Node_node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
-
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["nome_membro"]
@@ -79,7 +93,9 @@ class PoolMembro(models.Model):
         return self.nome_membro
 
     def get_absolute_url(self):
-        return reverse("plugins:bigipnetbox:PoolMembro")
+        return reverse("plugins:bigipnetbox:poolmembro_list")
+
+
 
 class VirtualServer(models.Model):
     virtual_server_name = models.CharField(
@@ -95,6 +111,18 @@ class VirtualServer(models.Model):
     fk_VirtualAddress_ip_virtual_address = models.ForeignKey(to='VirtualAddress', on_delete = models.SET_NULL, null=True, blank = True)
     objects = RestrictedQuerySet.as_manager()
 
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["virtual_server_name"]
+
+    def __str__(self):
+        return self.virtual_server_name
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:virtualserver_list")
+
+
+
 class VirtualAddress(models.Model):
     ip_virtual_address = models.CharField(
         max_length=200
@@ -107,7 +135,18 @@ class VirtualAddress(models.Model):
     )
     fk_Node_node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
     objects = RestrictedQuerySet.as_manager()
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["ip_virtual_address"]
+
+    def __str__(self):
+        return self.ip_virtual_address
     
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:virtualaddress_list")
+    
+
+
 class ClusterBig(models.Model):
     Nome_cluster = models.CharField(
         max_length=200
@@ -116,6 +155,18 @@ class ClusterBig(models.Model):
     fk_Node_node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
     fk_VirtualServer_virtual = models.ForeignKey(to='VirtualServer', on_delete = models.SET_NULL, null=True, blank = True)
     objects = RestrictedQuerySet.as_manager()
+
+    objects = RestrictedQuerySet.as_manager()
+
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["Nome_cluster"]
+
+    def __str__(self):
+        return self.Nome_cluster
+
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:clusterbig_list")
 
 
 

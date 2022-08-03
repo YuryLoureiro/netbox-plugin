@@ -1,6 +1,6 @@
 
 from netbox.forms import NetBoxModelForm
-from .models import Node, Pool, NodeChoices, VirtualAddress, VirtualServer
+from .models import ClusterBig, Node, Pool, NodeChoices, PoolMembro, VirtualAddress, VirtualServer
 
 import re
 
@@ -39,6 +39,12 @@ class NodeFilterForm(NetBoxModelFilterSetForm):
     #tag = TagFilterField(model)
 
 class NodeForm(NetBoxModelForm):
+    node_name = forms.CharField(
+        required=True,
+        label='Nome do Node'
+    )
+
+    fk_Netbox_ipaddress = forms.ModelChoiceField(queryset = IPAddress.objects.all() ,label='Endereço IP')
     class Meta:
         model = Node
         fields = [
@@ -49,6 +55,7 @@ class NodeForm(NetBoxModelForm):
         ]
 
 class PoolForm(NetBoxModelForm):
+    fk_PoolMembro_nome = forms.ModelChoiceField(queryset = PoolMembro.objects.all() ,label='Membro Pool')
     class Meta:
         model = Pool
         fields = [
@@ -60,6 +67,7 @@ class PoolForm(NetBoxModelForm):
         ]
 
 class VirtualServerForm(NetBoxModelForm):
+    virtual_server_name = forms.CharField(label='Nome Virtual Server')
     class Meta:
         model = VirtualServer
         fields = [
@@ -70,6 +78,8 @@ class VirtualServerForm(NetBoxModelForm):
 
 
 class VirtualAddressForm(NetBoxModelForm):
+    ip_virtual_address = forms.CharField(label='IP virtual')
+    fk_Node_node_nome = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=False)
     class Meta:
         model = VirtualAddress
         fields = [
@@ -79,7 +89,29 @@ class VirtualAddressForm(NetBoxModelForm):
             "fk_Node_node_nome",
         ]
 
+class PoolMembroForm(NetBoxModelForm):
+    nome_membro = forms.CharField(label = 'Nome do Membro da Pool')
+    fk_Node_node_nome = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=True)
+    class Meta:
+        model = PoolMembro
+        fields = [
+            "nome_membro",
+            "fk_Node_node_nome",
+        ]
 
+class ClusterBigForm(NetBoxModelForm):
+
+    fk_Netbox_device = forms.ModelChoiceField(queryset = Device.objects.all() ,label='Device Big Ip', required=False)
+    fk_Node_node_nome = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=False)
+    fk_VirtualServer_virtual = forms.ModelChoiceField(queryset = VirtualServer.objects.all() ,label='Virtual Server', required= False)
+    class Meta:
+        model = ClusterBig
+        fields = [
+            "Nome_cluster",
+            "fk_Netbox_device",
+            "fk_Node_node_nome",
+            "fk_VirtualServer_virtual",
+        ]
 """ class SettingsForm(NetBoxModelForm):
     class Meta:
         model = Settings
