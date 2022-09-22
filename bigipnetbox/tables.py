@@ -127,9 +127,9 @@ class PartitionTable(NetBoxTable):
 
 class IruleTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome do Membro")
+    name = tables.Column(verbose_name = "Nome da Irule")
     partition_id = tables.LinkColumn(
-        "plugins:bigipnetbox:partition_list", verbose_name = "Cluster"
+        "plugins:bigipnetbox:partition_list", verbose_name = "Partição"
     )
 
     class Meta(NetBoxTable.Meta):
@@ -143,9 +143,9 @@ class IruleTable(NetBoxTable):
 
 class Devicef5Table(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome do Membro")
+    name = tables.Column(verbose_name = "Nome do device")
     device_id = tables.LinkColumn(
-        "plugins:bigipnetbox:devicef5_list", verbose_name = "Cluster"
+        "plugins:bigipnetbox:devicef5_list", verbose_name = "Device netbox"
     )
 
     class Meta(NetBoxTable.Meta):

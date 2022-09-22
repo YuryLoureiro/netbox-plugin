@@ -3,7 +3,7 @@ from netbox.views.generic import ObjectChangeLogView
 from . import views
 from .models import *
 
-app_name = "ipnetbox"
+app_name = "bigipnetbox"
 
 urlpatterns = (
 

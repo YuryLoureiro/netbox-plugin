@@ -174,6 +174,7 @@ class Clusterf5Form(NetBoxModelForm):
 
 class PartitionForm(NetBoxModelForm):
     name = forms.CharField(label = 'Nome da partição')
+    clusterf5_id = forms.ModelChoiceField(queryset = Clusterf5.objects.all() ,label='Partition', required=True)
     class Meta:
         model = Partition
         fields = [

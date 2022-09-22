@@ -19,7 +19,7 @@ class NodeChoices(ChoiceSet):
         (STATUS_DEPRECATED, 'Deprecated', 'red'),
     )
 
-class Node(NetBoxModel):
+class Node(models.Model):
     name = models.CharField(
         max_length=200
     )
@@ -39,7 +39,7 @@ class Node(NetBoxModel):
         default=NodeChoices.STATUS_ACTIVE
     )
     partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
-    #objects = RestrictedQuerySet.as_manager()
+    objects = RestrictedQuerySet.as_manager()
 
     class Meta:
         app_label = "bigipnetbox"
@@ -55,7 +55,7 @@ class Node(NetBoxModel):
 
 ###POOL###
 
-class Pool(NetBoxModel):
+class Pool(models.Model):
     name = models.CharField(
         max_length=200
     )
@@ -71,6 +71,7 @@ class Pool(NetBoxModel):
     )
     partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
 
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["name"]
@@ -85,7 +86,7 @@ class Pool(NetBoxModel):
 
 
 
-class PoolMember(NetBoxModel):
+class PoolMember(models.Model):
     name = models.CharField(
         max_length=200
     )
@@ -93,6 +94,7 @@ class PoolMember(NetBoxModel):
     port = models.IntegerField()
     pool_id = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
 
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["name"]
@@ -107,7 +109,7 @@ class PoolMember(NetBoxModel):
 
 ##VIRTUAL SERVER###
 
-class VirtualServer(NetBoxModel):
+class VirtualServer(models.Model):
     name = models.CharField(
         max_length=200
     )
@@ -116,6 +118,8 @@ class VirtualServer(NetBoxModel):
     pool_id = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
     virtualaddress_id = models.ForeignKey(to='VirtualAddress', on_delete = models.SET_NULL, null=True, blank = True)
     partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
+
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["name"]
@@ -129,12 +133,13 @@ class VirtualServer(NetBoxModel):
 
 
 
-class VirtualAddress(NetBoxModel):
+class VirtualAddress(models.Model):
     ip = models.CharField(
         max_length=200
     )
     node_id = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
     ipaddress_id = models.ForeignKey(to = 'ipam.IPAddress', on_delete=models.SET_NULL, null=True, blank=True)
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["ip"]
@@ -148,11 +153,12 @@ class VirtualAddress(NetBoxModel):
     
 
 
-class Clusterf5(NetBoxModel):
+class Clusterf5(models.Model):
     name = models.CharField(
         max_length=200
     )
 
+    objects = RestrictedQuerySet.as_manager()
 
     class Meta:
         app_label = "bigipnetbox"
@@ -167,12 +173,13 @@ class Clusterf5(NetBoxModel):
         return reverse("plugins:bigipnetbox:clusterf5_list")
 
 
-class Partition(NetBoxModel):
+class Partition(models.Model):
     name = models.CharField(
         max_length=200
     )
     clusterf5_id = models.ForeignKey(to = 'Clusterf5', on_delete=models.SET_NULL, null=True, blank=True)
 
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["name"]
@@ -185,13 +192,14 @@ class Partition(NetBoxModel):
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:partition_list")
 
-class Irule(NetBoxModel):
+class Irule(models.Model):
     name = models.CharField(
         max_length=200
     )
     partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
     definition = models.CharField(max_length=20000)
 
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["name"]
@@ -204,12 +212,14 @@ class Irule(NetBoxModel):
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:irule_list")
 
-class Devicef5(NetBoxModel):
+class Devicef5(models.Model):
     name = models.CharField(
         max_length=200
     ) 
     device_id = models.ForeignKey(to = 'dcim.Device', on_delete=models.SET_NULL, null=True, blank=True)
     clusterf5_id = models.ForeignKey(to = 'Clusterf5', on_delete=models.SET_NULL, null=True, blank=True)
+
+    objects = RestrictedQuerySet.as_manager()
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["name"]

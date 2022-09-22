@@ -102,4 +102,19 @@ menu_items = (
             ),
         ),
         ),
+
+    PluginMenuItem(
+        link="plugins:bigipnetbox:partition_list",
+        link_text="Partition",
+        permissions=["bigipnetbox.admin_full"],
+        buttons=(
+            PluginMenuButton(
+                link='plugins:bigipnetbox:partition_add',
+                title='Add',
+                icon_class='mdi mdi-plus-thick',
+                color=ButtonColorChoices.GREEN,
+                permissions=['bigipnetbox.admin_full'],
+            ),
+        ),
+        ),
     )
