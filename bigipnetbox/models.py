@@ -1,8 +1,11 @@
+from unicodedata import name
 from django.db import models
 from django.urls import reverse
 from utilities.querysets import RestrictedQuerySet
 from netbox.models.features import ChangeLoggingMixin
 from utilities.choices import ChoiceSet
+
+from netbox.models import NetBoxModel
 
 class NodeChoices(ChoiceSet):
 
@@ -16,11 +19,11 @@ class NodeChoices(ChoiceSet):
         (STATUS_DEPRECATED, 'Deprecated', 'red'),
     )
 
-class Node(models.Model):
-    node_name = models.CharField(
+class Node(NetBoxModel):
+    name = models.CharField(
         max_length=200
     )
-    fk_Netbox_ipaddress = models.OneToOneField(
+    ipaddress_id = models.OneToOneField(
                                             to = 'ipam.IPAddress',
                                             on_delete=models.SET_NULL,
                                             null=True,
@@ -30,27 +33,30 @@ class Node(models.Model):
         max_length=200,
         blank=True
     )
-    estado = models.CharField(
+    state = models.CharField(
         max_length=200,
         choices=NodeChoices,
         default=NodeChoices.STATUS_ACTIVE
     )
-    objects = RestrictedQuerySet.as_manager()
+    partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
+    #objects = RestrictedQuerySet.as_manager()
 
     class Meta:
         app_label = "bigipnetbox"
-        ordering = ["node_name"]
+        ordering = ["name"]
+        verbose_name = 'Node'
+        verbose_name_plural = 'Nodes'
 
     def __str__(self):
-        return self.node_name
+        return self.name
 
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:node_list")
 
+###POOL###
 
-
-class Pool(models.Model):
-    nome_pool = models.CharField(
+class Pool(NetBoxModel):
+    name = models.CharField(
         max_length=200
     )
     allownat = models.CharField(
@@ -63,119 +69,153 @@ class Pool(models.Model):
         max_length=200,
         blank=True
     )
-    fk_PoolMembro_nome = models.ForeignKey(to='PoolMembro', on_delete = models.SET_NULL, null=True, blank = True)
-    objects = RestrictedQuerySet.as_manager()
+    partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
 
     class Meta:
         app_label = "bigipnetbox"
-        ordering = ["nome_pool"]
+        ordering = ["name"]
+        verbose_name = 'Pool'
+        verbose_name_plural = 'Pools'
 
     def __str__(self):
-        return self.nome_pool
+        return self.name
 
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:pool_list")
 
 
 
-
-class PoolMembro(models.Model):
-    nome_membro = models.CharField(
+class PoolMember(NetBoxModel):
+    name = models.CharField(
         max_length=200
     )
-    fk_Node_node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
-    objects = RestrictedQuerySet.as_manager()
+    node_id = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
+    port = models.IntegerField()
+    pool_id = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
+
     class Meta:
         app_label = "bigipnetbox"
-        ordering = ["nome_membro"]
+        ordering = ["name"]
+        verbose_name = 'Member'
+        verbose_name_plural = 'Members'
 
     def __str__(self):
-        return self.nome_membro
+        return self.name
 
     def get_absolute_url(self):
-        return reverse("plugins:bigipnetbox:poolmembro_list")
+        return reverse("plugins:bigipnetbox:poolmember_list")
 
+##VIRTUAL SERVER###
 
-
-class VirtualServer(models.Model):
-    virtual_server_name = models.CharField(
+class VirtualServer(NetBoxModel):
+    name = models.CharField(
         max_length=200
     )
-    mask = models.CharField(
-        max_length=200
-    )
-    porta = models.CharField(
-        max_length=200
-    )
-    fk_Pool_nome_pool = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
-    fk_VirtualAddress_ip_virtual_address = models.ForeignKey(to='VirtualAddress', on_delete = models.SET_NULL, null=True, blank = True)
-    objects = RestrictedQuerySet.as_manager()
-
+    mask = models.IntegerField(default=0)
+    port = models.IntegerField(default=0)
+    pool_id = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
+    virtualaddress_id = models.ForeignKey(to='VirtualAddress', on_delete = models.SET_NULL, null=True, blank = True)
+    partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
     class Meta:
         app_label = "bigipnetbox"
-        ordering = ["virtual_server_name"]
-
+        ordering = ["name"]
+        verbose_name = 'Virtual Server'
+        verbose_name_plural = 'Virtual Servers'
     def __str__(self):
-        return self.virtual_server_name
+        return self.name
 
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:virtualserver_list")
 
 
 
-class VirtualAddress(models.Model):
-    ip_virtual_address = models.CharField(
+class VirtualAddress(NetBoxModel):
+    ip = models.CharField(
         max_length=200
     )
-    partition = models.CharField(
-        max_length=200
-    )
-    campo = models.CharField(
-        max_length=200
-    )
-    fk_Node_node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
-    objects = RestrictedQuerySet.as_manager()
+    node_id = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
+    ipaddress_id = models.ForeignKey(to = 'ipam.IPAddress', on_delete=models.SET_NULL, null=True, blank=True)
     class Meta:
         app_label = "bigipnetbox"
-        ordering = ["ip_virtual_address"]
-
+        ordering = ["ip"]
+        verbose_name = 'Virtual Address'
+        verbose_name_plural = 'Virtual Addresses'
     def __str__(self):
-        return self.ip_virtual_address
+        return self.ip
     
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:virtualaddress_list")
     
 
 
-class ClusterBig(models.Model):
-    Nome_cluster = models.CharField(
+class Clusterf5(NetBoxModel):
+    name = models.CharField(
         max_length=200
     )
-    fk_Netbox_device = models.ForeignKey(to='dcim.Device', on_delete = models.SET_NULL, null=True, blank = True)
-    fk_Node_node_nome = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
-    fk_VirtualServer_virtual = models.ForeignKey(to='VirtualServer', on_delete = models.SET_NULL, null=True, blank = True)
-    objects = RestrictedQuerySet.as_manager()
 
-    objects = RestrictedQuerySet.as_manager()
 
     class Meta:
         app_label = "bigipnetbox"
-        ordering = ["Nome_cluster"]
+        ordering = ["name"]
+        verbose_name = 'Cluster'
+        verbose_name_plural = 'Clusters'
 
     def __str__(self):
-        return self.Nome_cluster
+        return self.name
 
     def get_absolute_url(self):
-        return reverse("plugins:bigipnetbox:clusterbig_list")
+        return reverse("plugins:bigipnetbox:clusterf5_list")
 
 
+class Partition(NetBoxModel):
+    name = models.CharField(
+        max_length=200
+    )
+    clusterf5_id = models.ForeignKey(to = 'Clusterf5', on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["name"]
+        verbose_name = 'Partition'
+        verbose_name_plural = 'Partitions'
 
+    def __str__(self):
+        return self.name
 
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:partition_list")
 
+class Irule(NetBoxModel):
+    name = models.CharField(
+        max_length=200
+    )
+    partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
+    definition = models.CharField(max_length=20000)
 
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["name"]
+        verbose_name = 'Irule'
+        verbose_name_plural = 'Irules'
 
+    def __str__(self):
+        return self.name
 
+    def get_absolute_url(self):
+        return reverse("plugins:bigipnetbox:irule_list")
+
+class Devicef5(NetBoxModel):
+    name = models.CharField(
+        max_length=200
+    ) 
+    device_id = models.ForeignKey(to = 'dcim.Device', on_delete=models.SET_NULL, null=True, blank=True)
+    clusterf5_id = models.ForeignKey(to = 'Clusterf5', on_delete=models.SET_NULL, null=True, blank=True)
+    class Meta:
+        app_label = "bigipnetbox"
+        ordering = ["name"]
+        verbose_name = 'Device'
+        verbose_name_plural = 'Devices'
+    
 """ class Settings(ChangeLoggingMixin, models.Model):
     created = models.DateTimeField(
             auto_now_add=True,

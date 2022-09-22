@@ -75,12 +75,12 @@ menu_items = (
         ),
         ),
     PluginMenuItem(
-        link="plugins:bigipnetbox:poolmembro_list",
+        link="plugins:bigipnetbox:poolmember_list",
         link_text="Pool Membro",
         permissions=["bigipnetbox.admin_full"],
         buttons=(
             PluginMenuButton(
-                link='plugins:bigipnetbox:poolmembro_add',
+                link='plugins:bigipnetbox:poolmember_add',
                 title='Add',
                 icon_class='mdi mdi-plus-thick',
                 color=ButtonColorChoices.GREEN,
@@ -89,12 +89,12 @@ menu_items = (
         ),
         ),
     PluginMenuItem(
-        link="plugins:bigipnetbox:clusterbig_list",
-        link_text="Cluster",
+        link="plugins:bigipnetbox:clusterf5_list",
+        link_text="Clusterf5",
         permissions=["bigipnetbox.admin_full"],
         buttons=(
             PluginMenuButton(
-                link='plugins:bigipnetbox:clusterbig_add',
+                link='plugins:bigipnetbox:clusterf5_add',
                 title='Add',
                 icon_class='mdi mdi-plus-thick',
                 color=ButtonColorChoices.GREEN,

@@ -11,8 +11,8 @@ from netbox.views import generic
 from .models import *
 from .forms import  *
 from .tables import *
-from .filters import NodeFilterSet, PoolFilterSet, PoolMembroFilterSet, VirtualServerFilterSet, VirtualAddressFilterSet, ClusterBigFilterSet
-from .forms import NodeFilterForm, PoolFilterForm, PoolMembroFilterForm, VirtualServerFilterForm, VirtualAddressFilterForm, ClusterBigFilterForm
+from .filters import *
+from .forms import *
 
 #Node
 class NodeListView(generic.ObjectListView):
@@ -116,58 +116,131 @@ class VirtualAddressDeleteBulk(generic.BulkDeleteView):
 
 
 #Pool Member
-class PoolMembroListView(generic.ObjectListView):
-    queryset = PoolMembro.objects.all()
-    table = PoolMembroTable
-    filterset = PoolMembroFilterSet
-    filterset_form = PoolMembroFilterForm
+class PoolMemberListView(generic.ObjectListView):
+    queryset = PoolMember.objects.all()
+    table = PoolMemberTable
+    filterset = PoolMemberFilterSet
+    filterset_form = PoolMemberFilterForm
 
-class PoolMembroView(generic.ObjectView):
-    queryset = PoolMembro.objects.all()
-    table = PoolMembroTable
-
-
-class PoolMembroEdit(generic.ObjectEditView):
-    queryset = PoolMembro.objects.all()
-    form = PoolMembroForm
+class PoolMemberView(generic.ObjectView):
+    queryset = PoolMember.objects.all()
+    table = PoolMemberTable
 
 
-class PoolMembroDelete(generic.ObjectDeleteView):
-    queryset = PoolMembro.objects.all()
+class PoolMemberEdit(generic.ObjectEditView):
+    queryset = PoolMember.objects.all()
+    form = PoolMemberForm
 
 
-class PoolMembroDeleteBulk(generic.BulkDeleteView):
-    queryset = PoolMembro.objects.all()
-    table = PoolMembroTable
+class PoolMemberDelete(generic.ObjectDeleteView):
+    queryset = PoolMember.objects.all()
+
+
+class PoolMemberDeleteBulk(generic.BulkDeleteView):
+    queryset = PoolMember.objects.all()
+    table = PoolMemberTable
 
 
 #CLUSTER
-class ClusterBigListView(generic.ObjectListView):
-    queryset = ClusterBig.objects.all()
-    table = ClusterBigTable
-    filterset = ClusterBigFilterSet
-    filterset_form = ClusterBigFilterForm
+class Clusterf5ListView(generic.ObjectListView):
+    queryset = Clusterf5.objects.all()
+    table = Clusterf5Table
+    filterset = Clusterf5FilterSet
+    filterset_form = ClusterFilterForm
 
-class ClusterBigView(generic.ObjectView):
-    queryset = ClusterBig.objects.all()
-    table = ClusterBigTable
-
-
-class ClusterBigEdit(generic.ObjectEditView):
-    queryset = ClusterBig.objects.all()
-    form = ClusterBigForm
+class Clusterf5View(generic.ObjectView):
+    queryset = Clusterf5.objects.all()
+    table = Clusterf5Table
 
 
-class ClusterBigDelete(generic.ObjectDeleteView):
-    queryset = ClusterBig.objects.all()
+class Clusterf5Edit(generic.ObjectEditView):
+    queryset = Clusterf5.objects.all()
+    form = Clusterf5Form
 
 
-class ClusterBigDeleteBulk(generic.BulkDeleteView):
-    queryset = ClusterBig.objects.all()
-    table = ClusterBigTable
+class Clusterf5Delete(generic.ObjectDeleteView):
+    queryset = Clusterf5.objects.all()
 
 
+class Clusterf5DeleteBulk(generic.BulkDeleteView):
+    queryset = Clusterf5.objects.all()
+    table = Clusterf5Table
 
+
+#PARTITION
+class PartitionListView(generic.ObjectListView):
+    queryset = Partition.objects.all()
+    table = PartitionTable
+    filterset = PartitionFilterSet
+    filterset_form = PartitionFilterForm
+
+class PartitionView(generic.ObjectView):
+    queryset = Partition.objects.all()
+    table = PartitionTable
+
+
+class PartitionEdit(generic.ObjectEditView):
+    queryset = Partition.objects.all()
+    form = PartitionForm
+
+
+class PartitionDelete(generic.ObjectDeleteView):
+    queryset = Partition.objects.all()
+
+
+class PartitionDeleteBulk(generic.BulkDeleteView):
+    queryset = Partition.objects.all()
+    table = PartitionTable
+
+#Devicef5
+class Devicef5ListView(generic.ObjectListView):
+    queryset = Devicef5.objects.all()
+    table = Devicef5Table
+    filterset = Devicef5FilterSet
+    filterset_form = Devicef5FilterForm
+
+class Devicef5View(generic.ObjectView):
+    queryset = Devicef5.objects.all()
+    table = Devicef5Table
+
+
+class Devicef5Edit(generic.ObjectEditView):
+    queryset = Devicef5.objects.all()
+    form = Devicef5Form
+
+
+class Devicef5Delete(generic.ObjectDeleteView):
+    queryset = Devicef5.objects.all()
+
+
+class Devicef5DeleteBulk(generic.BulkDeleteView):
+    queryset = Devicef5.objects.all()
+    table = Devicef5Table
+
+#Irule
+class IruleListView(generic.ObjectListView):
+    queryset = Irule.objects.all()
+    table = IruleTable
+    filterset = IruleFilterSet
+    filterset_form = IruleFilterForm
+
+class IruleView(generic.ObjectView):
+    queryset = Irule.objects.all()
+    table = IruleTable
+
+
+class IruleEdit(generic.ObjectEditView):
+    queryset = Irule.objects.all()
+    form = IruleForm
+
+
+class IruleDelete(generic.ObjectDeleteView):
+    queryset = Irule.objects.all()
+
+
+class IruleDeleteBulk(generic.BulkDeleteView):
+    queryset = Irule.objects.all()
+    table = IruleTable
 #exemplos
 
 """ class SettingsView(generic.ObjectListView):

@@ -1,70 +1,75 @@
 from multiprocessing import pool
+from sre_parse import State
 from tabnanny import verbose
 import django_tables2 as tables
 from django_tables2.utils import A
 from django.utils.safestring import mark_safe
 from netbox.tables import NetBoxTable, columns
-from .models import ClusterBig, Node,Pool, PoolMembro, VirtualAddress, VirtualServer
+from .models import *
 
 class NodeTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    node_name = tables.Column(verbose_name = "Nome Node")
-    fk_Netbox_ipaddress = tables.LinkColumn(
-        "ipam:ipaddress", args=[A("fk_Netbox_ipaddress.pk")], verbose_name = "IP"
+    name = tables.Column(verbose_name = "Nome Node")
+    ipaddress_id = tables.LinkColumn(
+        "ipam:ipaddress", args=[A("ipaddress_id.pk")], verbose_name = "IP"
     )
     description = tables.Column(verbose_name = "descricao")
-    estado = tables.Column(verbose_name = "state")
-
+    state = tables.Column(verbose_name = "estado")
+    partition_id = tables.LinkColumn(
+        "plugins:bigipnetbox:partition_list", verbose_name = "Partição"
+    )
     class Meta(NetBoxTable.Meta):
         model = Node
         fields = [
             "pk",
-            "node_name",
-            "fk_Netbox_ipaddress",
+            "name",
+            "ipaddress_id",
             "description",
-            "estado",
+            "state",
+            "partition_id"
         ]
 
 class PoolTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    nome_pool= tables.Column(verbose_name = "Nome pool")
+    name= tables.Column(verbose_name = "Nome pool")
     allownat = tables.Column(verbose_name = "NAT")
     allowsnat = tables.Column(verbose_name = "AllowSNat")
     description = tables.Column(verbose_name = "description")
-    fk_PoolMembro_nome = tables.LinkColumn(
-        "plugins:bigipnetbox:poolmembro_list", verbose_name = "Membro da pool"
+    partition_id  = tables.LinkColumn(
+        "plugins:bigipnetbox:partition_list", verbose_name = "Membro da pool"
     )
     class Meta(NetBoxTable.Meta):
         model = Pool
         fields = [
             "pk",
-            "nome_pool",
+            "name",
             "allownat",
             "allowsnat",
             "description",
-            "fk_PoolMembro_nome",
+            "partition_id",
         ]
 
 class VirtualServerTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    virtual_server_name = tables.Column(verbose_name = "Nome Virtual Server")
+    name = tables.Column(verbose_name = "Nome Virtual Server")
     mask = tables.Column(verbose_name = "Mascara")
-    porta = tables.Column(verbose_name = "Porta")
+    port = tables.Column(verbose_name = "Porta")
     class Meta(NetBoxTable.Meta):
         model = VirtualServer
         fields = [
             "pk",
-            "virtual_server_name",
+            "name",
             "mask",
-            "porta",
+            "port",
+            "pool_id",
+            "virtualaddress_id",
+            "partition_id"
         ]
 
 class VirtualAddressTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    ip_virtual_address = tables.Column(verbose_name = "Ip End. Virtual")
-    partition = tables.Column(verbose_name = "partição")
-    Campo = tables.Column(verbose_name = "campo")
-    fk_Node_node_nome = tables.LinkColumn(
+    ip = tables.Column(verbose_name = "Ip End. Virtual")
+    node_id = tables.LinkColumn(
         "plugins:bigipnetbox:node_list", verbose_name = "Node"
     )
 
@@ -72,52 +77,85 @@ class VirtualAddressTable(NetBoxTable):
         model = VirtualAddress
         fields = [
             "pk",
-            "ip_virtual_address",
-            "partition",
-            "Campo",
-            "fk_Node_node_nome",
+            "ip",
+            "node_id",
+            "ipaddress_id",
         ]
 
-class PoolMembroTable(NetBoxTable):
+class PoolMemberTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    nome_membro = tables.Column(verbose_name = "Nome do Membro")
-    fk_Node_node_nome = tables.LinkColumn(
+    name = tables.Column(verbose_name = "Nome do Membro")
+    node_id = tables.LinkColumn(
         "plugins:bigipnetbox:node_list", verbose_name = "Node"
     )
 
     class Meta(NetBoxTable.Meta):
-        model = PoolMembro
+        model = PoolMember
         fields = [
             "pk",
-            "nome_membro",
-            "fk_Node_node_nome",
+            "name",
+            "node_id",
+            "port",
+            "pool_id"
         ]
 
-class ClusterBigTable(NetBoxTable):
+class Clusterf5Table(NetBoxTable):
     pk = columns.ToggleColumn()
-    Nome_cluster = tables.Column(verbose_name = "Nome do cluster")
-    fk_Netbox_device = tables.LinkColumn(
-        "dcim:device", args=[A("fk_Netbox_device.pk")], verbose_name = "Device"
-    )
-    fk_Node_node_nome = tables.LinkColumn(
-        "plugins:bigipnetbox:node_list", verbose_name = "Node"
-    )
-    fk_VirtualServer_virtual = tables.LinkColumn(
-        "plugins:bigipnetbox:virtualserver_list", verbose_name = "Virtual Server"
+    name = tables.Column(verbose_name = "Nome do cluster")
+    class Meta(NetBoxTable.Meta):
+        model = Clusterf5
+        fields = [
+            "pk",
+            "name",
+        ]
+
+
+class PartitionTable(NetBoxTable):
+    pk = columns.ToggleColumn()
+    name = tables.Column(verbose_name = "Nome do Membro")
+    cluster_id = tables.LinkColumn(
+        "plugins:bigipnetbox:cluster_list", verbose_name = "Cluster"
     )
 
     class Meta(NetBoxTable.Meta):
-        model = ClusterBig
+        model = Partition
         fields = [
             "pk",
-            "Nome_cluster",
-            "fk_Netbox_device",
-            "fk_Node_node_nome",
-            "fk_VirtualServer_virtual",
+            "name",
+            "cluster_id",
         ]
 
+class IruleTable(NetBoxTable):
+    pk = columns.ToggleColumn()
+    name = tables.Column(verbose_name = "Nome do Membro")
+    partition_id = tables.LinkColumn(
+        "plugins:bigipnetbox:partition_list", verbose_name = "Cluster"
+    )
 
+    class Meta(NetBoxTable.Meta):
+        model = Irule
+        fields = [
+            "pk",
+            "name",
+            "partition_id",
+            "definition"
+        ]
 
+class Devicef5Table(NetBoxTable):
+    pk = columns.ToggleColumn()
+    name = tables.Column(verbose_name = "Nome do Membro")
+    device_id = tables.LinkColumn(
+        "plugins:bigipnetbox:devicef5_list", verbose_name = "Cluster"
+    )
+
+    class Meta(NetBoxTable.Meta):
+        model = Devicef5
+        fields = [
+            "pk",
+            "name",
+            "cluster_id",
+            "device_id"
+        ]
 """ 
 class MaskedPassword(tables.Column):
     def render(self, value):

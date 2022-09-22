@@ -5,7 +5,7 @@ from django.db.models import Q
 from netaddr.core import AddrFormatError
 from extras.filters import TagFilter
 
-from .models import Node, Pool, PoolMembro, ClusterBig, VirtualServer, VirtualAddress
+from .models import Devicef5, Irule, Node, Partition, Pool, PoolMember, Clusterf5, VirtualServer, VirtualAddress
 
 
 class NodeFilterSet(django_filters.FilterSet):
@@ -17,7 +17,7 @@ class NodeFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Node
-        fields = ['node_name', 'fk_Netbox_ipaddress', 'description', 'estado']
+        fields = ['name', 'ipaddress_id', 'description', 'state', 'partition_id']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""
@@ -25,7 +25,7 @@ class NodeFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 #Q(id__icontains=value)
-                Q(node_name__icontains=value)
+                Q(name__icontains=value)
         )
         return queryset.filter(qs_filter)
 
@@ -38,7 +38,7 @@ class PoolFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Pool
-        fields = ['nome_pool', 'allownat', 'allowsnat', 'description', 'fk_PoolMembro_nome']
+        fields = ['name', 'allownat', 'allowsnat', 'description', 'partition_id']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""
@@ -46,11 +46,11 @@ class PoolFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 #Q(id__icontains=value)
-                Q(nome_pool__icontains=value)
+                Q(name__icontains=value)
         )
         return queryset.filter(qs_filter)
 
-class PoolMembroFilterSet(django_filters.FilterSet):
+class PoolMemberFilterSet(django_filters.FilterSet):
     q = django_filters.CharFilter(
         method='search',
         label='Search',
@@ -58,8 +58,8 @@ class PoolMembroFilterSet(django_filters.FilterSet):
     #tag = TagFilter()
 
     class Meta:
-        model = PoolMembro
-        fields = ['nome_membro', 'fk_Node_node_nome']
+        model = PoolMember
+        fields = ['name', 'node_id', 'port', 'pool_id']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""
@@ -67,7 +67,7 @@ class PoolMembroFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 #Q(id__icontains=value)
-                Q(nome_membro__icontains=value)
+                Q(name__icontains=value)
         )
         return queryset.filter(qs_filter)
 
@@ -80,7 +80,7 @@ class VirtualServerFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = VirtualServer
-        fields = ['virtual_server_name', 'mask', 'porta', 'fk_Pool_nome_pool', 'fk_VirtualAddress_ip_virtual_address']
+        fields = ['name', 'mask', 'port', 'pool_id', 'virtualaddress_id', 'partition_id']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""
@@ -88,7 +88,7 @@ class VirtualServerFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 #Q(id__icontains=value)
-                Q(virtual_server_name__icontains=value)
+                Q(name__icontains=value)
         )
         return queryset.filter(qs_filter)
 
@@ -101,7 +101,7 @@ class VirtualAddressFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = VirtualAddress
-        fields = ['ip_virtual_address', 'partition', 'campo', 'fk_Node_node_nome']
+        fields = ['ip', 'node_id', 'ipaddress_id']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""
@@ -109,11 +109,11 @@ class VirtualAddressFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 #Q(id__icontains=value)
-                Q(ip_virtual_address__icontains=value)
+                Q(ip__icontains=value)
         )
         return queryset.filter(qs_filter)
 
-class ClusterBigFilterSet(django_filters.FilterSet):
+class Clusterf5FilterSet(django_filters.FilterSet):
     q = django_filters.CharFilter(
         method='search',
         label='Search',
@@ -121,8 +121,8 @@ class ClusterBigFilterSet(django_filters.FilterSet):
     #tag = TagFilter()
 
     class Meta:
-        model = ClusterBig
-        fields = ['Nome_cluster', 'fk_Netbox_device', 'fk_Node_node_nome', 'fk_VirtualServer_virtual']
+        model = Clusterf5
+        fields = ['name']
 
     def search(self, queryset, name, value):
         """Perform the filtered search."""
@@ -130,6 +130,69 @@ class ClusterBigFilterSet(django_filters.FilterSet):
             return queryset
         qs_filter = (
                 #Q(id__icontains=value)
-                Q(Nome_cluster__icontains=value)
+                Q(name__icontains=value)
+        )
+        return queryset.filter(qs_filter)
+
+class PartitionFilterSet(django_filters.FilterSet):
+    q = django_filters.CharFilter(
+        method='search',
+        label='Search',
+    )
+    #tag = TagFilter()
+
+    class Meta:
+        model = Partition
+        fields = ['name','clusterf5_id']
+
+    def search(self, queryset, name, value):
+        """Perform the filtered search."""
+        if not value.strip():
+            return queryset
+        qs_filter = (
+                #Q(id__icontains=value)
+                Q(name__icontains=value)
+        )
+        return queryset.filter(qs_filter)
+
+class IruleFilterSet(django_filters.FilterSet):
+    q = django_filters.CharFilter(
+        method='search',
+        label='Search',
+    )
+    #tag = TagFilter()
+
+    class Meta:
+        model = Irule
+        fields = ['name','partition_id','definition']
+
+    def search(self, queryset, name, value):
+        """Perform the filtered search."""
+        if not value.strip():
+            return queryset
+        qs_filter = (
+                #Q(id__icontains=value)
+                Q(name__icontains=value)
+        )
+        return queryset.filter(qs_filter)
+
+class Devicef5FilterSet(django_filters.FilterSet):
+    q = django_filters.CharFilter(
+        method='search',
+        label='Search',
+    )
+    #tag = TagFilter()
+
+    class Meta:
+        model = Devicef5
+        fields = ['name','device_id','clusterf5_id']
+
+    def search(self, queryset, name, value):
+        """Perform the filtered search."""
+        if not value.strip():
+            return queryset
+        qs_filter = (
+                #Q(id__icontains=value)
+                Q(name__icontains=value)
         )
         return queryset.filter(qs_filter)

@@ -1,6 +1,9 @@
 
+from random import choices
+from sre_parse import State
+from unicodedata import name
 from netbox.forms import NetBoxModelForm
-from .models import ClusterBig, Node, Pool, NodeChoices, PoolMembro, VirtualAddress, VirtualServer
+from .models import Clusterf5, Devicef5, Irule, Node, Partition, Pool, NodeChoices, PoolMember, VirtualAddress, VirtualServer
 
 import re
 
@@ -30,11 +33,6 @@ class NodeFilterForm(NetBoxModelFilterSetForm):
         required=False,
         label='Search'
     )
-    estado = forms.MultipleChoiceField(
-        choices=NodeChoices,
-        required=False,
-        widget=StaticSelectMultiple()
-    )
 
 class PoolFilterForm(NetBoxModelFilterSetForm):
     model = Pool
@@ -43,8 +41,8 @@ class PoolFilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
 
-class PoolMembroFilterForm(NetBoxModelFilterSetForm):
-    model = PoolMembro
+class PoolMemberFilterForm(NetBoxModelFilterSetForm):
+    model = PoolMember
     q = forms.CharField(
         required=False,
         label='Search'
@@ -64,90 +62,146 @@ class VirtualAddressFilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
 
-class ClusterBigFilterForm(NetBoxModelFilterSetForm):
-    model = ClusterBig
+class ClusterFilterForm(NetBoxModelFilterSetForm):
+    model = Clusterf5
     q = forms.CharField(
         required=False,
         label='Search'
     )
 
+class PartitionFilterForm(NetBoxModelFilterSetForm):
+    model = Partition
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
 
+class IruleFilterForm(NetBoxModelFilterSetForm):
+    model = Irule
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
+
+class Devicef5FilterForm(NetBoxModelFilterSetForm):
+    model = Devicef5
+    q = forms.CharField(
+        required=False,
+        label='Search'
+    )
     #tag = TagFilterField(model)
 
 class NodeForm(NetBoxModelForm):
-    node_name = forms.CharField(
+    name = forms.CharField(
         required=True,
         label='Nome do Node'
     )
 
-    fk_Netbox_ipaddress = forms.ModelChoiceField(queryset = IPAddress.objects.all() ,label='Endereço IP')
+    ipaddress_id = forms.ModelChoiceField(queryset = IPAddress.objects.all() ,label='Endereço IP')
+    partition_id = forms.ModelChoiceField(queryset = Partition.objects.all() ,label='Partition')
+    state = forms.CharField(
+        required=True
+    )
     class Meta:
         model = Node
         fields = [
-            "node_name",
-            "fk_Netbox_ipaddress",
+            "name",
+            "ipaddress_id",
             "description",
-            "estado",
+            "state",
+            "partition_id"
         ]
 
 class PoolForm(NetBoxModelForm):
-    fk_PoolMembro_nome = forms.ModelChoiceField(queryset = PoolMembro.objects.all() ,label='Membro Pool')
+    name = forms.CharField(
+        required=True,
+        label='Nome da pool'
+    )
+    partition_id = forms.ModelChoiceField(queryset = Partition.objects.all() ,label='Partition')
     class Meta:
         model = Pool
         fields = [
-            "nome_pool",
+            "name",
             "allownat",
             "allowsnat",
             "description",
-            "fk_PoolMembro_nome",
+            "partition_id",
         ]
 
 class VirtualServerForm(NetBoxModelForm):
-    virtual_server_name = forms.CharField(label='Nome Virtual Server')
+    name = forms.CharField(label='Nome Virtual Server')
     class Meta:
         model = VirtualServer
         fields = [
-            "virtual_server_name",
+            "name",
             "mask",
-            "porta",
+            "port",
+            "virtualaddress_id",
+            "partition_id"
         ]
 
 
 class VirtualAddressForm(NetBoxModelForm):
-    ip_virtual_address = forms.CharField(label='IP virtual')
-    fk_Node_node_nome = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=False)
+    ip = forms.CharField(label='IP do endereço virtual')
+    node_id = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=False)
     class Meta:
         model = VirtualAddress
         fields = [
-            "ip_virtual_address",
-            "partition",
-            "campo",
-            "fk_Node_node_nome",
+            "ip",
+            "node_id",
+            "ipaddress_id",
         ]
 
-class PoolMembroForm(NetBoxModelForm):
-    nome_membro = forms.CharField(label = 'Nome do Membro da Pool')
-    fk_Node_node_nome = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=True)
+class PoolMemberForm(NetBoxModelForm):
+    name = forms.CharField(label = 'Nome do Membro da Pool')
+    node_id = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=True)
     class Meta:
-        model = PoolMembro
+        model = PoolMember
         fields = [
-            "nome_membro",
-            "fk_Node_node_nome",
+            "name",
+            "node_id",
+            "port",
+            "pool_id",
         ]
 
-class ClusterBigForm(NetBoxModelForm):
-
-    fk_Netbox_device = forms.ModelChoiceField(queryset = Device.objects.all() ,label='Device Big Ip', required=False)
-    fk_Node_node_nome = forms.ModelChoiceField(queryset = Node.objects.all() ,label='Node', required=False)
-    fk_VirtualServer_virtual = forms.ModelChoiceField(queryset = VirtualServer.objects.all() ,label='Virtual Server', required= False)
+class Clusterf5Form(NetBoxModelForm):
+    name = forms.CharField(label = 'Nome do cluster')
     class Meta:
-        model = ClusterBig
+        model = Clusterf5
         fields = [
-            "Nome_cluster",
-            "fk_Netbox_device",
-            "fk_Node_node_nome",
-            "fk_VirtualServer_virtual",
+            "name",
         ]
+
+class PartitionForm(NetBoxModelForm):
+    name = forms.CharField(label = 'Nome da partição')
+    class Meta:
+        model = Partition
+        fields = [
+            "name",
+            "clusterf5_id"
+        ]
+
+class IruleForm(NetBoxModelForm):
+    name = forms.CharField(label = 'Nome da Irule')
+    class Meta:
+        model = Irule
+        fields = [
+            "name",
+            "partition_id",
+            "definition",
+        ]
+
+class Devicef5Form(NetBoxModelForm):
+    name = forms.CharField(label = 'Nome do device')
+    class Meta:
+        model = Devicef5
+        fields = [
+            "name",
+            "device_id",
+            "clusterf5_id",
+        ]
+
+
 """ class SettingsForm(NetBoxModelForm):
     class Meta:
         model = Settings

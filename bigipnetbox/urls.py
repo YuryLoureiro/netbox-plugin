@@ -3,7 +3,7 @@ from netbox.views.generic import ObjectChangeLogView
 from . import views
 from .models import *
 
-app_name = "bigipnetbox"
+app_name = "ipnetbox"
 
 urlpatterns = (
 
@@ -11,7 +11,7 @@ urlpatterns = (
     ######Node
     path("node/", views.NodeListView.as_view(), name="node_list"),
     path("node/add/", views.NodeEdit.as_view(), name="node_add"),
-    path("node/<int:pk>/", views.NodeView.as_view(), name="node"),
+    #path("node/<int:pk>/", views.NodeView.as_view(), name="node"),
     path("node/<int:pk>/edit/", views.NodeEdit.as_view(), name="node_edit"),
     path(
         "node/<int:pk>/delete/",
@@ -94,47 +94,108 @@ urlpatterns = (
 
 
     ######
-    # PoolMembro
+    # PoolMember
     ######
 
-    path("poolmembro/", views.PoolMembroListView.as_view(), name="poolmembro_list"),
-    path("poolmembro/add/", views.PoolMembroEdit.as_view(), name="poolmembro_add"),
-    #path("poolmembro/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
-    path("poolmembro/<int:pk>/edit/", views.PoolMembroEdit.as_view(), name="poolmembro_edit"),
+    path("poolmember/", views.PoolMemberListView.as_view(), name="poolmember_list"),
+    path("poolmember/add/", views.PoolMemberEdit.as_view(), name="poolmember_add"),
+    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("poolmember/<int:pk>/edit/", views.PoolMemberEdit.as_view(), name="poolmember_edit"),
     path(
-        "poolmembro/<int:pk>/delete/",
-        views.PoolMembroDelete.as_view(),
-        name="poolmembro_delete",
+        "poolmember/<int:pk>/delete/",
+        views.PoolMemberDelete.as_view(),
+        name="poolmember_delete",
     ),
     path(
-        "poolmembro/delete/",
-        views.PoolMembroDeleteBulk.as_view(),
-        name="poolmembro_delete_bulk",
+        "poolmember/delete/",
+        views.PoolMemberDeleteBulk.as_view(),
+        name="poolmember_delete_bulk",
     ),
-    path("poolmembro/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="poolmembro_changelog", kwargs={"model": PoolMembro}),
+    path("poolmember/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="poolmember_changelog", kwargs={"model": PoolMember}),
 
     #######
-    # CLUSTER
+    # CLUSTERf5
     ######
 
-    path("clusterbig/", views.ClusterBigListView.as_view(), name="clusterbig_list"),
-    path("clusterbig/add/", views.ClusterBigEdit.as_view(), name="clusterbig_add"),
-    #path("poolmembro/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
-    path("clusterbig/<int:pk>/edit/", views.ClusterBigEdit.as_view(), name="clusterbig_edit"),
+    path("clusterf5/", views.Clusterf5ListView.as_view(), name="clusterf5_list"),
+    path("clusterf5/add/", views.Clusterf5Edit.as_view(), name="clusterf5_add"),
+    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("clusterf5/<int:pk>/edit/", views.Clusterf5Edit.as_view(), name="clusterf5_edit"),
     path(
-        "clusterbig/<int:pk>/delete/",
-        views.ClusterBigDelete.as_view(),
-        name="clusterbig_delete",
+        "clusterf5/<int:pk>/delete/",
+        views.Clusterf5Delete.as_view(),
+        name="clusterf5_delete",
     ),
     path(
-        "clusterbig/delete/",
-        views.ClusterBigDeleteBulk.as_view(),
-        name="clusterbig_delete_bulk",
+        "clusterf5/delete/",
+        views.Clusterf5DeleteBulk.as_view(),
+        name="clusterf5_delete_bulk",
     ),
-    path("clusterbig/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="clusterbig_changelog", kwargs={"model": ClusterBig}),
+    path("clusterf5/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="clusterf5_changelog", kwargs={"model": Clusterf5}),
+
+
+    #######
+    # PARTITION
+    ######
+
+    path("partition/", views.PartitionListView.as_view(), name="partition_list"),
+    path("partition/add/", views.PartitionEdit.as_view(), name="partition_add"),
+    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("partition/<int:pk>/edit/", views.PartitionEdit.as_view(), name="partition_edit"),
+    path(
+        "partition/<int:pk>/delete/",
+        views.PartitionDelete.as_view(),
+        name="partition_delete",
+    ),
+    path(
+        "partition/delete/",
+        views.PartitionDeleteBulk.as_view(),
+        name="partition_delete_bulk",
+    ),
+    path("partition/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="partition_changelog", kwargs={"model": Partition}),
+
+
+    #######
+    # DEVICEf5
+    ######
+
+    path("devicef5/", views.Devicef5ListView.as_view(), name="devicef5_list"),
+    path("devicef5/add/", views.Devicef5Edit.as_view(), name="devicef5_add"),
+    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("devicef5/<int:pk>/edit/", views.Devicef5Edit.as_view(), name="devicef5_edit"),
+    path(
+        "devicef5/<int:pk>/delete/",
+        views.Devicef5Delete.as_view(),
+        name="devicef5_delete",
+    ),
+    path(
+        "devicef5/delete/",
+        views.Devicef5DeleteBulk.as_view(),
+        name="devicef5_delete_bulk",
+    ),
+    path("devicef5/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="devicef5_changelog", kwargs={"model": Devicef5}),
+
+
+    #######
+    # IRULE
+    ######
+
+    path("irule/", views.IruleListView.as_view(), name="irule_list"),
+    path("irule/add/", views.IruleEdit.as_view(), name="irule_add"),
+    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("irule/<int:pk>/edit/", views.IruleEdit.as_view(), name="irule_edit"),
+    path(
+        "irule/<int:pk>/delete/",
+        views.IruleDelete.as_view(),
+        name="irule_delete",
+    ),
+    path(
+        "irule/delete/",
+        views.IruleDeleteBulk.as_view(),
+        name="irule_delete_bulk",
+    ),
+    path("irule/<int:pk>/changelog/", ObjectChangeLogView.as_view(), name="irule_changelog", kwargs={"model": Irule}),
 )
-
-
 
 
 
