@@ -244,14 +244,11 @@ class Devicef5(models.Model):
     verify = models.BooleanField(default=False)
     status = models.BooleanField(default=True)
     objects = RestrictedQuerySet.as_manager()
-
     class Meta:
         app_label = "bigipnetbox"
         ordering = ["hostname"]
-
     def __str__(self):
         return self.hostname
-
     def get_absolute_url(self):
         return reverse("plugins:bigipnetbox:settings")
  """
