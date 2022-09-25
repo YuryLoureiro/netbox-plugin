@@ -9,14 +9,14 @@ from .models import *
 
 class NodeTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome Node")
+    name = tables.LinkColumn("plugins:bigipnetbox:node", args=[A("pk")], verbose_name = "Nome")
     ipaddress_id = tables.LinkColumn(
         "ipam:ipaddress", args=[A("ipaddress_id.pk")], verbose_name = "IP"
     )
-    description = tables.Column(verbose_name = "descricao")
-    state = tables.Column(verbose_name = "estado")
+    description = tables.Column(verbose_name = "Descrição")
+    state = tables.Column(verbose_name = "Estado")
     partition_id = tables.LinkColumn(
-        "plugins:bigipnetbox:partition_list", verbose_name = "Partição"
+        "plugins:bigipnetbox:partition", args=[A("partition_id.pk")], verbose_name = "Partição"
     )
     class Meta(NetBoxTable.Meta):
         model = Node
@@ -31,13 +31,14 @@ class NodeTable(NetBoxTable):
 
 class PoolTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name= tables.Column(verbose_name = "Nome pool")
-    allownat = tables.Column(verbose_name = "NAT")
-    allowsnat = tables.Column(verbose_name = "AllowSNat")
-    description = tables.Column(verbose_name = "description")
+    name = tables.LinkColumn("plugins:bigipnetbox:pool", args=[A("pk")], verbose_name = "Nome pool")
+    allownat = tables.Column(verbose_name = "Allow NAT")
+    allowsnat = tables.Column(verbose_name = "Allow SNat")
+    description = tables.Column(verbose_name = "Descrição")
     partition_id  = tables.LinkColumn(
-        "plugins:bigipnetbox:partition_list", verbose_name = "Membro da pool"
+        "plugins:bigipnetbox:partition", args=[A("partition_id.pk")], verbose_name = "Partição"
     )
+
     class Meta(NetBoxTable.Meta):
         model = Pool
         fields = [
@@ -51,7 +52,7 @@ class PoolTable(NetBoxTable):
 
 class VirtualServerTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome Virtual Server")
+    name = tables.LinkColumn("plugins:bigipnetbox:virtualserver", args=[A("pk")],verbose_name = "Nome")
     mask = tables.Column(verbose_name = "Mascara")
     port = tables.Column(verbose_name = "Porta")
     class Meta(NetBoxTable.Meta):
@@ -60,35 +61,27 @@ class VirtualServerTable(NetBoxTable):
             "pk",
             "name",
             "mask",
-            "port",
-            "pool_id",
-            "virtualaddress_id",
-            "partition_id"
+            "port"
         ]
 
 class VirtualAddressTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    ip = tables.Column(verbose_name = "Ip End. Virtual")
-    node_id = tables.LinkColumn(
-        "plugins:bigipnetbox:node_list", verbose_name = "Node"
-    )
+    ip = tables.LinkColumn("plugins:bigipnetbox:virtualaddress", args=[A("pk")],verbose_name = "Ip End. Virtual")
+    node_id = tables.LinkColumn("plugins:bigipnetbox:node", args=[A("node_id.pk")], verbose_name = "Node")
 
     class Meta(NetBoxTable.Meta):
         model = VirtualAddress
         fields = [
             "pk",
             "ip",
-            "node_id",
-            "ipaddress_id",
+            "node_id"
         ]
 
 class PoolMemberTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome do Membro")
-    node_id = tables.LinkColumn(
-        "plugins:bigipnetbox:node_list", verbose_name = "Node"
-    )
-
+    name = tables.LinkColumn("plugins:bigipnetbox:poolmember", args=[A("pk")],verbose_name = "Nome")
+    node_id = tables.LinkColumn("plugins:bigipnetbox:node", args=[A("node_id.pk")], verbose_name = "Node")
+    pool_id = tables.LinkColumn("plugins:bigipnetbox:pool", args=[A("pool_id.pk")], verbose_name = "Pool")
     class Meta(NetBoxTable.Meta):
         model = PoolMember
         fields = [
@@ -96,12 +89,12 @@ class PoolMemberTable(NetBoxTable):
             "name",
             "node_id",
             "port",
-            "pool_id"
+            "pool_id",
         ]
 
 class Clusterf5Table(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome do cluster")
+    name = tables.LinkColumn("plugins:bigipnetbox:clusterf5", args=[A("pk")],verbose_name = "Nome")
     class Meta(NetBoxTable.Meta):
         model = Clusterf5
         fields = [
@@ -112,9 +105,9 @@ class Clusterf5Table(NetBoxTable):
 
 class PartitionTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome do Membro")
-    cluster_id = tables.LinkColumn(
-        "plugins:bigipnetbox:cluster_list", verbose_name = "Cluster"
+    name = tables.LinkColumn("plugins:bigipnetbox:partition", args=[A("pk")],verbose_name = "Nome")
+    clusterf5_id = tables.LinkColumn(
+        "plugins:bigipnetbox:clusterf5", args=[A("clusterf5_id.pk")],verbose_name = "Cluster"
     )
 
     class Meta(NetBoxTable.Meta):
@@ -122,16 +115,16 @@ class PartitionTable(NetBoxTable):
         fields = [
             "pk",
             "name",
-            "cluster_id",
+            "clusterf5_id",
         ]
 
 class IruleTable(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome da Irule")
+    name = tables.LinkColumn("plugins:bigipnetbox:irule", args=[A("pk")],verbose_name = "Nome")
     partition_id = tables.LinkColumn(
-        "plugins:bigipnetbox:partition_list", verbose_name = "Partição"
+        "plugins:bigipnetbox:partition",args=[A("partition_id.pk")], verbose_name = "Partição"
     )
-
+    definition = tables.Column(verbose_name = "Definição")
     class Meta(NetBoxTable.Meta):
         model = Irule
         fields = [
@@ -143,17 +136,19 @@ class IruleTable(NetBoxTable):
 
 class Devicef5Table(NetBoxTable):
     pk = columns.ToggleColumn()
-    name = tables.Column(verbose_name = "Nome do device")
+    name = tables.LinkColumn("plugins:bigipnetbox:devicef5", args=[A("pk")],verbose_name = "Nome")
     device_id = tables.LinkColumn(
         "plugins:bigipnetbox:devicef5_list", verbose_name = "Device netbox"
     )
-
+    clusterf5_id = tables.LinkColumn(
+        "plugins:bigipnetbox:clusterf5", args=[A("clusterf5_id.pk")],verbose_name = "Cluster"
+    )
     class Meta(NetBoxTable.Meta):
         model = Devicef5
         fields = [
             "pk",
             "name",
-            "cluster_id",
+            "clusterf5_id",
             "device_id"
         ]
 """ 

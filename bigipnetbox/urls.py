@@ -11,7 +11,7 @@ urlpatterns = (
     ######Node
     path("node/", views.NodeListView.as_view(), name="node_list"),
     path("node/add/", views.NodeEdit.as_view(), name="node_add"),
-    #path("node/<int:pk>/", views.NodeView.as_view(), name="node"),
+    path("node/<int:pk>/", views.NodeView.as_view(), name="node"),
     path("node/<int:pk>/edit/", views.NodeEdit.as_view(), name="node_edit"),
     path(
         "node/<int:pk>/delete/",
@@ -33,7 +33,7 @@ urlpatterns = (
 
     path("pool/", views.PoolListView.as_view(), name="pool_list"),
     path("pool/add/", views.PoolEdit.as_view(), name="pool_add"),
-    #path("Pool/<int:pk>/", views.PoolView.as_view(), name="pool"),
+    path("Pool/<int:pk>/", views.PoolView.as_view(), name="pool"),
     path("pool/<int:pk>/edit/", views.PoolEdit.as_view(), name="pool_edit"),
     path(
         "pool/<int:pk>/delete/",
@@ -55,7 +55,7 @@ urlpatterns = (
 
     path("virtualserver/", views.VirtualServerListView.as_view(), name="virtualserver_list"),
     path("virtualserver/add/", views.VirtualServerEdit.as_view(), name="virtualserver_add"),
-    #path("virtualserver/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("virtualserver/<int:pk>/", views.VirtualServerView.as_view(), name="virtualserver"),
     path("virtualserver/<int:pk>/edit/", views.VirtualServerEdit.as_view(), name="virtualserver_edit"),
     path(
         "virtualserver/<int:pk>/delete/",
@@ -77,7 +77,7 @@ urlpatterns = (
 
     path("virtualaddress/", views.VirtualAddressListView.as_view(), name="virtualaddress_list"),
     path("virtualaddress/add/", views.VirtualAddressEdit.as_view(), name="virtualaddress_add"),
-    #path("virtualaddress/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("virtualaddress/<int:pk>/", views.VirtualAddressView.as_view(), name="virtualaddress"),
     path("virtualaddress/<int:pk>/edit/", views.VirtualAddressEdit.as_view(), name="virtualaddress_edit"),
     path(
         "virtualaddress/<int:pk>/delete/",
@@ -99,7 +99,7 @@ urlpatterns = (
 
     path("poolmember/", views.PoolMemberListView.as_view(), name="poolmember_list"),
     path("poolmember/add/", views.PoolMemberEdit.as_view(), name="poolmember_add"),
-    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("poolmember/<int:pk>/", views.PoolMemberView.as_view(), name="poolmember"),
     path("poolmember/<int:pk>/edit/", views.PoolMemberEdit.as_view(), name="poolmember_edit"),
     path(
         "poolmember/<int:pk>/delete/",
@@ -119,7 +119,7 @@ urlpatterns = (
 
     path("clusterf5/", views.Clusterf5ListView.as_view(), name="clusterf5_list"),
     path("clusterf5/add/", views.Clusterf5Edit.as_view(), name="clusterf5_add"),
-    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("clusterf5/<int:pk>/", views.Clusterf5View.as_view(), name="clusterf5"),
     path("clusterf5/<int:pk>/edit/", views.Clusterf5Edit.as_view(), name="clusterf5_edit"),
     path(
         "clusterf5/<int:pk>/delete/",
@@ -140,7 +140,7 @@ urlpatterns = (
 
     path("partition/", views.PartitionListView.as_view(), name="partition_list"),
     path("partition/add/", views.PartitionEdit.as_view(), name="partition_add"),
-    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("partition/<int:pk>/", views.PartitionView.as_view(), name="partition"),
     path("partition/<int:pk>/edit/", views.PartitionEdit.as_view(), name="partition_edit"),
     path(
         "partition/<int:pk>/delete/",
@@ -161,7 +161,7 @@ urlpatterns = (
 
     path("devicef5/", views.Devicef5ListView.as_view(), name="devicef5_list"),
     path("devicef5/add/", views.Devicef5Edit.as_view(), name="devicef5_add"),
-    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("devicef5/<int:pk>/", views.Devicef5View.as_view(), name="devicef5"),
     path("devicef5/<int:pk>/edit/", views.Devicef5Edit.as_view(), name="devicef5_edit"),
     path(
         "devicef5/<int:pk>/delete/",
@@ -182,7 +182,7 @@ urlpatterns = (
 
     path("irule/", views.IruleListView.as_view(), name="irule_list"),
     path("irule/add/", views.IruleEdit.as_view(), name="irule_add"),
-    #path("poolmember/<int:pk>/", views.virtualserverView.as_view(), name="virtualserver"),
+    path("irule/<int:pk>/", views.IruleView.as_view(), name="irule"),
     path("irule/<int:pk>/edit/", views.IruleEdit.as_view(), name="irule_edit"),
     path(
         "irule/<int:pk>/delete/",

@@ -6,7 +6,7 @@
 {% load render_table from django_tables2 %}
 
 {% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="{% url 'plugins:bigipnetbox:node_list' %}">Ir para lista de nodes</a></li>
+<li class="breadcrumb-item"><a href="{% url 'plugins:bigipnetbox:pool_list' %}">Ir para lista de Pools</a></li>
 {% endblock %}
 
 {% block subtitle %}
@@ -30,10 +30,6 @@
                                         <td>Nome</td>
                                         <td>{{ object.name }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>IP</td>
-                                        <td>{{ object.ipaddress_id }}</td>
-                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -41,7 +37,7 @@
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <strong>Clients</strong>
+                                    <strong>Membros da Pool</strong>
                                 </div>
                                 {% render_table pool_table %}
                             </div>

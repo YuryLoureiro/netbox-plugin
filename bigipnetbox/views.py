@@ -24,7 +24,13 @@ class NodeListView(generic.ObjectListView):
 class NodeView(generic.ObjectView):
     queryset = Node.objects.all()
     table = NodeTable
+    def get_extra_context(self, request, instance):
+        pool_table = PoolMemberTable(instance.pools.all())
 
+        data = {
+                "pool_table" : pool_table,
+            }
+        return data
 
 class NodeEdit(generic.ObjectEditView):
     queryset = Node.objects.all()
@@ -49,7 +55,13 @@ class PoolListView(generic.ObjectListView):
 class PoolView(generic.ObjectView):
     queryset = Pool.objects.all()
     table = PoolTable
+    def get_extra_context(self, request, instance):
+        pool_table = PoolMemberTable(instance.members.all())
 
+        data = {
+                "pool_table" : pool_table,
+            }
+        return data
 
 class PoolEdit(generic.ObjectEditView):
     queryset = Pool.objects.all()

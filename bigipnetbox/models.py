@@ -90,9 +90,9 @@ class PoolMember(models.Model):
     name = models.CharField(
         max_length=200
     )
-    node_id = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True)
+    node_id = models.ForeignKey(to='Node', on_delete = models.SET_NULL, null=True, blank = True, related_name = "pools")
     port = models.IntegerField()
-    pool_id = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True)
+    pool_id = models.ForeignKey(to='Pool', on_delete = models.SET_NULL, null=True, blank = True, related_name = "members")
 
     objects = RestrictedQuerySet.as_manager()
     class Meta:

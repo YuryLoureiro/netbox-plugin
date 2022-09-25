@@ -99,8 +99,9 @@ class NodeForm(NetBoxModelForm):
 
     ipaddress_id = forms.ModelChoiceField(queryset = IPAddress.objects.all() ,label='Endereço IP')
     partition_id = forms.ModelChoiceField(queryset = Partition.objects.all() ,label='Partition')
-    state = forms.CharField(
-        required=True
+    state = forms.ChoiceField(
+        required=True,
+        choices=NodeChoices
     )
     class Meta:
         model = Node
@@ -173,8 +174,8 @@ class Clusterf5Form(NetBoxModelForm):
         ]
 
 class PartitionForm(NetBoxModelForm):
-    name = forms.CharField(label = 'Nome da partição')
-    clusterf5_id = forms.ModelChoiceField(queryset = Clusterf5.objects.all() ,label='Partition', required=True)
+    name = forms.CharField(label = 'Nome')
+    clusterf5_id = forms.ModelChoiceField(queryset = Clusterf5.objects.all() ,label='Cluster', required=True)
     class Meta:
         model = Partition
         fields = [
