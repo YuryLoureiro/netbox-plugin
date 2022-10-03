@@ -33,7 +33,12 @@ class NodeFilterForm(NetBoxModelFilterSetForm):
         required=False,
         label='Search'
     )
-
+    state = forms.MultipleChoiceField(
+        choices=NodeChoices,
+        required=False,
+        widget=StaticSelectMultiple()
+    )
+    
 class PoolFilterForm(NetBoxModelFilterSetForm):
     model = Pool
     q = forms.CharField(

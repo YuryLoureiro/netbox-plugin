@@ -1,5 +1,4 @@
 from rest_framework import routers
-#from netbox.api.routers import NetBoxRouter
 from .views import *
 from netbox.api import NetBoxRouter
 

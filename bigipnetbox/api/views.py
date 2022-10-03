@@ -7,7 +7,7 @@ from .serializers import *
 class NodeViewSet(NetBoxModelViewSet):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
-    #filterset_class = NodeFilterSet
+    filterset_class = NodeFilterSet
 
 class PoolViewSet(NetBoxModelViewSet):
     queryset = Pool.objects.all()

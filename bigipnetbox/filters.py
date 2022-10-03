@@ -13,7 +13,6 @@ class NodeFilterSet(django_filters.FilterSet):
         method='search',
         label='Search',
     )
-    #tag = TagFilter()
 
     class Meta:
         model = Node
@@ -24,8 +23,16 @@ class NodeFilterSet(django_filters.FilterSet):
         if not value.strip():
             return queryset
         qs_filter = (
-                #Q(id__icontains=value)
                 Q(name__icontains=value)
+        )
+        return queryset.filter(qs_filter)
+
+    def state(self, queryset, name, value):
+        """Perform the filtered search."""
+        if not value.strip():
+            return queryset
+        qs_filter = (
+                Q(state__icontains=value)
         )
         return queryset.filter(qs_filter)
 
