@@ -3,21 +3,8 @@ from django.db import models
 from django.urls import reverse
 from utilities.querysets import RestrictedQuerySet
 from netbox.models.features import ChangeLoggingMixin
-from utilities.choices import ChoiceSet
 
-from netbox.models import NetBoxModel
-
-class NodeChoices(ChoiceSet):
-
-    STATUS_ACTIVE = 'active'
-    STATUS_RESERVED = 'reserved'
-    STATUS_DEPRECATED = 'deprecated'
-
-    CHOICES = (
-        (STATUS_ACTIVE, 'Active', 'blue'),
-        (STATUS_RESERVED, 'Reserved', 'cyan'),
-        (STATUS_DEPRECATED, 'Deprecated', 'red'),
-    )
+from .choices import NodeStatusChoices, PoolAllowChoices
 
 class Node(models.Model):
     name = models.CharField(
@@ -35,8 +22,8 @@ class Node(models.Model):
     )
     state = models.CharField(
         max_length=200,
-        choices=NodeChoices,
-        default=NodeChoices.STATUS_ACTIVE
+        choices=NodeStatusChoices,
+        default=NodeStatusChoices.STATUS_ACTIVE
     )
     partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
     objects = RestrictedQuerySet.as_manager()
@@ -60,10 +47,16 @@ class Pool(models.Model):
         max_length=200
     )
     allownat = models.CharField(
-        max_length=200
+        max_length=200,
+        choices=PoolAllowChoices,
+        default=PoolAllowChoices.CHOICE_YES,
+        blank=True
     )
     allowsnat = models.CharField(
-        max_length=200
+        max_length=200,
+        choices=PoolAllowChoices,
+        default=PoolAllowChoices.CHOICE_YES,
+        blank=True
     )
     description = models.CharField(
         max_length=200,

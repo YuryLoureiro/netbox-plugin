@@ -76,7 +76,7 @@ menu_items = (
         ),
     PluginMenuItem(
         link="plugins:bigipnetbox:poolmember_list",
-        link_text="Pool Membro",
+        link_text="Pool Member",
         permissions=["bigipnetbox.admin_full"],
         buttons=(
             PluginMenuButton(
@@ -90,7 +90,7 @@ menu_items = (
         ),
     PluginMenuItem(
         link="plugins:bigipnetbox:clusterf5_list",
-        link_text="Clusterf5",
+        link_text="Cluster",
         permissions=["bigipnetbox.admin_full"],
         buttons=(
             PluginMenuButton(
@@ -110,6 +110,36 @@ menu_items = (
         buttons=(
             PluginMenuButton(
                 link='plugins:bigipnetbox:partition_add',
+                title='Add',
+                icon_class='mdi mdi-plus-thick',
+                color=ButtonColorChoices.GREEN,
+                permissions=['bigipnetbox.admin_full'],
+            ),
+        ),
+        ),
+    
+    PluginMenuItem(
+        link="plugins:bigipnetbox:devicef5_list",
+        link_text="Devices",
+        permissions=["bigipnetbox.admin_full"],
+        buttons=(
+            PluginMenuButton(
+                link='plugins:bigipnetbox:devicef5_add',
+                title='Add',
+                icon_class='mdi mdi-plus-thick',
+                color=ButtonColorChoices.GREEN,
+                permissions=['bigipnetbox.admin_full'],
+            ),
+        ),
+        ),
+    
+    PluginMenuItem(
+        link="plugins:bigipnetbox:irule_list",
+        link_text="IRule",
+        permissions=["bigipnetbox.admin_full"],
+        buttons=(
+            PluginMenuButton(
+                link='plugins:bigipnetbox:irule_add',
                 title='Add',
                 icon_class='mdi mdi-plus-thick',
                 color=ButtonColorChoices.GREEN,

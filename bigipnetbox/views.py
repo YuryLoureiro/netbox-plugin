@@ -20,6 +20,7 @@ class NodeListView(generic.ObjectListView):
     table = NodeTable
     filterset = NodeFilterSet
     filterset_form = NodeFilterForm
+    action_buttons = ('add',)
 
 class NodeView(generic.ObjectView):
     queryset = Node.objects.all()
@@ -41,9 +42,16 @@ class NodeDelete(generic.ObjectDeleteView):
     queryset = Node.objects.all()
 
 
-class NodeDeleteBulk(generic.BulkDeleteView):
+class NodeBulkDelete(generic.BulkDeleteView):
     queryset = Node.objects.all()
     table = NodeTable
+
+
+class NodeBulkEditView(generic.BulkEditView):
+    queryset = Node.objects.all()
+    filterset = NodeFilterSet
+    table = NodeTable
+    form = NodeBulkEditForm
 
 #POOL
 class PoolListView(generic.ObjectListView):
@@ -72,9 +80,15 @@ class PoolDelete(generic.ObjectDeleteView):
     queryset = Pool.objects.all()
 
 
-class PoolDeleteBulk(generic.BulkDeleteView):
+class PoolBulkDelete(generic.BulkDeleteView):
     queryset = Pool.objects.all()
     table = PoolTable
+
+class PoolBulkEditView(generic.BulkEditView):
+    queryset = Pool.objects.all()
+    filterset = PoolFilterSet
+    table = PoolTable
+    form = PoolBulkEditForm
 
 #Virtual Server
 class VirtualServerListView(generic.ObjectListView):
@@ -97,9 +111,15 @@ class VirtualServerDelete(generic.ObjectDeleteView):
     queryset = VirtualServer.objects.all()
 
 
-class VirtualServerDeleteBulk(generic.BulkDeleteView):
+class VirtualServerBulkDelete(generic.BulkDeleteView):
     queryset = VirtualServer.objects.all()
     table = VirtualServerTable
+
+class VirtualServerBulkEditView(generic.BulkEditView):
+    queryset = VirtualServer.objects.all()
+    filterset = VirtualServerFilterSet
+    table = VirtualServerTable
+    form = VirtualServerBulkEditForm
 
 #Virtual Adress
 class VirtualAddressListView(generic.ObjectListView):
@@ -107,6 +127,12 @@ class VirtualAddressListView(generic.ObjectListView):
     table = VirtualAddressTable
     filterset = VirtualAddressFilterSet
     filterset_form = VirtualAddressFilterForm
+
+class VirtualAddressBulkEditView(generic.BulkEditView):
+    queryset = VirtualAddress.objects.all()
+    filterset = VirtualAddressFilterSet
+    table = VirtualAddressTable
+    form = VirtualAddressBulkEditForm
 
 class VirtualAddressView(generic.ObjectView):
     queryset = VirtualAddress.objects.all()
@@ -122,7 +148,7 @@ class VirtualAddressDelete(generic.ObjectDeleteView):
     queryset = VirtualAddress.objects.all()
 
 
-class VirtualAddressDeleteBulk(generic.BulkDeleteView):
+class VirtualAddressBulkDelete(generic.BulkDeleteView):
     queryset = VirtualAddress.objects.all()
     table = VirtualAddressTable
 
@@ -148,9 +174,15 @@ class PoolMemberDelete(generic.ObjectDeleteView):
     queryset = PoolMember.objects.all()
 
 
-class PoolMemberDeleteBulk(generic.BulkDeleteView):
+class PoolMemberBulkDelete(generic.BulkDeleteView):
     queryset = PoolMember.objects.all()
     table = PoolMemberTable
+
+class PoolMemberBulkEditView(generic.BulkEditView):
+    queryset = PoolMember.objects.all()
+    filterset = PoolMemberFilterSet
+    table = PoolMemberTable
+    form = PoolMemberBulkEditForm
 
 
 #CLUSTER
@@ -158,7 +190,7 @@ class Clusterf5ListView(generic.ObjectListView):
     queryset = Clusterf5.objects.all()
     table = Clusterf5Table
     filterset = Clusterf5FilterSet
-    filterset_form = ClusterFilterForm
+    filterset_form = Clusterf5FilterForm
 
 class Clusterf5View(generic.ObjectView):
     queryset = Clusterf5.objects.all()
@@ -174,9 +206,15 @@ class Clusterf5Delete(generic.ObjectDeleteView):
     queryset = Clusterf5.objects.all()
 
 
-class Clusterf5DeleteBulk(generic.BulkDeleteView):
+class Clusterf5BulkDelete(generic.BulkDeleteView):
     queryset = Clusterf5.objects.all()
     table = Clusterf5Table
+
+class Clusterf5BulkEditView(generic.BulkEditView):
+    queryset = Clusterf5.objects.all()
+    filterset = Clusterf5FilterSet
+    table = Clusterf5Table
+    form = Clusterf5BulkEditForm
 
 
 #PARTITION
@@ -200,9 +238,15 @@ class PartitionDelete(generic.ObjectDeleteView):
     queryset = Partition.objects.all()
 
 
-class PartitionDeleteBulk(generic.BulkDeleteView):
+class PartitionBulkDelete(generic.BulkDeleteView):
     queryset = Partition.objects.all()
     table = PartitionTable
+
+class PartitionBulkEditView(generic.BulkEditView):
+    queryset = Partition.objects.all()
+    filterset = PartitionFilterSet
+    table = PartitionTable
+    form = PartitionBulkEditForm
 
 #Devicef5
 class Devicef5ListView(generic.ObjectListView):
@@ -225,9 +269,15 @@ class Devicef5Delete(generic.ObjectDeleteView):
     queryset = Devicef5.objects.all()
 
 
-class Devicef5DeleteBulk(generic.BulkDeleteView):
+class Devicef5BulkDelete(generic.BulkDeleteView):
     queryset = Devicef5.objects.all()
     table = Devicef5Table
+
+class Devicef5BulkEditView(generic.BulkEditView):
+    queryset = Devicef5.objects.all()
+    filterset = Devicef5FilterSet
+    table = Devicef5Table
+    form = Devicef5BulkEditForm
 
 #Irule
 class IruleListView(generic.ObjectListView):
@@ -250,9 +300,15 @@ class IruleDelete(generic.ObjectDeleteView):
     queryset = Irule.objects.all()
 
 
-class IruleDeleteBulk(generic.BulkDeleteView):
+class IruleBulkDelete(generic.BulkDeleteView):
     queryset = Irule.objects.all()
     table = IruleTable
+
+class IruleBulkEditView(generic.BulkEditView):
+    queryset = Irule.objects.all()
+    filterset = IruleFilterSet
+    table = IruleTable
+    form = IruleBulkEditForm
 #exemplos
 
 """ class SettingsView(generic.ObjectListView):
@@ -271,6 +327,6 @@ class SettingsDelete(generic.ObjectDeleteView):
     queryset = Settings.objects.all()
 
 
-class SettingsDeleteBulk(generic.BulkDeleteView):
+class SettingsBulkDelete(generic.BulkDeleteView):
     queryset = Settings.objects.all()
     table = SettingsTable """

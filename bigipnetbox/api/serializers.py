@@ -72,7 +72,7 @@ class NodeSerializer(serializers.Serializer):
     display = serializers.SerializerMethodField('get_display')
     ipaddress_id = NestedIPAddressSerializer(many=False,required=False, allow_null=True)
     description = serializers.CharField()
-    state = ChoiceField(choices=NodeChoices, required=False)
+    state = ChoiceField(choices=NodeStatusChoices, required=False)
     partition_id = NestedPartitionSerializer(required=True)
 
     def get_display(self, obj):

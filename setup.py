@@ -22,6 +22,7 @@ def get_version(rel_path):
     else:
         raise RuntimeError("Unable to find version string.")
 
+TIME_ZONE = 'America/Ciudad_Juarez'
 
 setup(
     name='',

@@ -2,15 +2,20 @@
 from random import choices
 from sre_parse import State
 from unicodedata import name
-from netbox.forms import NetBoxModelForm
-from .models import Clusterf5, Devicef5, Irule, Node, Partition, Pool, NodeChoices, PoolMember, VirtualAddress, VirtualServer
-
-import re
+from netbox.forms import NetBoxModelForm, NetBoxModelBulkEditForm, NetBoxModelFilterSetForm  
+from .models import Clusterf5, Devicef5, Irule, Node, Partition, Pool, PoolMember, VirtualAddress, VirtualServer
+from .choices import NodeStatusChoices, PoolAllowChoices
 
 from django import forms
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext as _
+
+from utilities.forms.fields import (
+    DynamicModelChoiceField, CSVModelChoiceField,
+    DynamicModelMultipleChoiceField,
+    TagFilterField, CSVChoiceField,
+)
 
 from extras.models import Tag
 from tenancy.models import Tenant
@@ -22,8 +27,6 @@ from utilities.forms import (
     DynamicModelMultipleChoiceField, StaticSelect,
     APISelect, APISelectMultiple, StaticSelectMultiple, TagFilterField
 )
-from netbox.forms import NetBoxModelForm, NetBoxModelBulkEditForm, NetBoxModelFilterSetForm
-
 from django.forms.widgets import TextInput
 
 
@@ -34,10 +37,33 @@ class NodeFilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
     state = forms.MultipleChoiceField(
-        choices=NodeChoices,
+        choices=NodeStatusChoices,
         required=False,
         widget=StaticSelectMultiple()
     )
+
+class NodeBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Node.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+    status = forms.ChoiceField(
+        required=False,
+        choices=NodeStatusChoices,
+    )
+
+    model = Node
+    nullable_fields = [
+       'tenant', 'description',
+    ]
     
 class PoolFilterForm(NetBoxModelFilterSetForm):
     model = Pool
@@ -45,6 +71,30 @@ class PoolFilterForm(NetBoxModelFilterSetForm):
         required=False,
         label='Search'
     )
+    state = forms.MultipleChoiceField(
+        choices=PoolAllowChoices,
+        required=False,
+        widget=StaticSelectMultiple()
+    )
+
+class PoolBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Pool.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = Pool
+    nullable_fields = [
+       'tenant', 'description',
+    ]
 
 class PoolMemberFilterForm(NetBoxModelFilterSetForm):
     model = PoolMember
@@ -53,12 +103,51 @@ class PoolMemberFilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
 
+class PoolMemberBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=PoolMember.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = PoolMember
+    nullable_fields = [
+       'tenant', 'description',
+    ]
+
 class VirtualServerFilterForm(NetBoxModelFilterSetForm):
     model = VirtualServer
     q = forms.CharField(
         required=False,
         label='Search'
     )
+
+class VirtualServerBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=VirtualServer.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = VirtualServer
+    nullable_fields = [
+       'tenant', 'description',
+    ]
+
 
 class VirtualAddressFilterForm(NetBoxModelFilterSetForm):
     model = VirtualAddress
@@ -67,12 +156,50 @@ class VirtualAddressFilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
 
-class ClusterFilterForm(NetBoxModelFilterSetForm):
+class VirtualAddressBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=VirtualAddress.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = VirtualAddress
+    nullable_fields = [
+       'tenant', 'description',
+    ]
+
+class Clusterf5FilterForm(NetBoxModelFilterSetForm):
     model = Clusterf5
     q = forms.CharField(
         required=False,
         label='Search'
     )
+
+class Clusterf5BulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Clusterf5.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = Clusterf5
+    nullable_fields = [
+       'tenant', 'description',
+    ]
 
 class PartitionFilterForm(NetBoxModelFilterSetForm):
     model = Partition
@@ -81,12 +208,50 @@ class PartitionFilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
 
+class PartitionBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Partition.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = Partition
+    nullable_fields = [
+       'tenant', 'description',
+    ]
+
 class IruleFilterForm(NetBoxModelFilterSetForm):
     model = Irule
     q = forms.CharField(
         required=False,
         label='Search'
     )
+
+class IruleBulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Irule.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = Irule
+    nullable_fields = [
+       'tenant', 'description',
+    ]
 
 class Devicef5FilterForm(NetBoxModelFilterSetForm):
     model = Devicef5
@@ -95,6 +260,25 @@ class Devicef5FilterForm(NetBoxModelFilterSetForm):
         label='Search'
     )
     #tag = TagFilterField(model)
+
+class Devicef5BulkEditForm(NetBoxModelBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Devicef5.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    tenant = DynamicModelChoiceField(
+        queryset=Tenant.objects.all(),
+        required=False
+    )
+    description = forms.CharField(
+        max_length=200,
+        required=False
+    )
+
+    model = Devicef5
+    nullable_fields = [
+       'tenant', 'description',
+    ]
 
 class NodeForm(NetBoxModelForm):
     name = forms.CharField(
@@ -106,7 +290,7 @@ class NodeForm(NetBoxModelForm):
     partition_id = forms.ModelChoiceField(queryset = Partition.objects.all() ,label='Partition')
     state = forms.ChoiceField(
         required=True,
-        choices=NodeChoices
+        choices=NodeStatusChoices
     )
     class Meta:
         model = Node
