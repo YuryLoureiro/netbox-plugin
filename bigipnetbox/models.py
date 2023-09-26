@@ -190,7 +190,7 @@ class Irule(models.Model):
         max_length=200
     )
     partition_id = models.ForeignKey(to='Partition', on_delete = models.SET_NULL, null=True, blank = True)
-    definition = models.CharField(max_length=20000)
+    definition = models.TextField(blank=False,)
 
     objects = RestrictedQuerySet.as_manager()
     class Meta:

@@ -22,11 +22,6 @@ from tenancy.models import Tenant
 from dcim.models import Device, Site
 from ipam.models import IPAddress, Prefix
 from ipam.formfields import IPNetworkFormField
-from utilities.forms import (
-    DynamicModelChoiceField,
-    DynamicModelMultipleChoiceField, StaticSelect,
-    APISelect, APISelectMultiple, StaticSelectMultiple, TagFilterField
-)
 from django.forms.widgets import TextInput
 
 
@@ -39,7 +34,6 @@ class NodeFilterForm(NetBoxModelFilterSetForm):
     state = forms.MultipleChoiceField(
         choices=NodeStatusChoices,
         required=False,
-        widget=StaticSelectMultiple()
     )
 
 class NodeBulkEditForm(NetBoxModelBulkEditForm):
@@ -74,7 +68,6 @@ class PoolFilterForm(NetBoxModelFilterSetForm):
     state = forms.MultipleChoiceField(
         choices=PoolAllowChoices,
         required=False,
-        widget=StaticSelectMultiple()
     )
 
 class PoolBulkEditForm(NetBoxModelBulkEditForm):

@@ -32,7 +32,7 @@ DATABASE = {
 # For optimal security, SECRET_KEY should be at least 50 characters in length and contain a mix of letters, numbers, and
 # symbols. NetBox will not run without this defined. For more information, see
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECRET_KEY
-SECRET_KEY = os.environ.get("SECRET_KEY", "")
+SECRET_KEY = "mmglfamx3n927*93$ks#r)h%*a(@))vb7*=2q$&z(=6@q&*ghjAAB"
 
 # Redis database settings. The Redis database is used for caching and background processing such as webhooks
 # Seperate sections for webhooks and caching allow for connecting to seperate Redis instances/datbases if desired.

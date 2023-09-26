@@ -2,7 +2,7 @@ import ipaddress
 from rest_framework import serializers
 #from bigipnetbox.models import bigipnetbox
 from ..models import *
-from netbox.api import ChoiceField, ContentTypeField, WritableNestedSerializer
+from netbox.api.fields import ChoiceField, ContentTypeField
 from netbox.api.serializers import NetBoxModelSerializer, WritableNestedSerializer
 from ipam.api.nested_serializers import NestedIPAddressSerializer
 from dcim.api.nested_serializers import NestedDeviceSerializer
@@ -107,6 +107,8 @@ class PoolSerializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name', 'allownat', 'allowsnat', 'description', 'partition_id',
         ]
+    def create(self, validated_data):
+        return Pool.objects.create(**validated_data)
 
 class PoolMemberSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -127,6 +129,8 @@ class PoolMemberSerializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name', 'node_id', 'port', 'pool_id',
         ]
+    def create(self, validated_data):
+        return PoolMember.objects.create(**validated_data)
 
 class VirtualServerSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -149,6 +153,8 @@ class VirtualServerSerializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name', 'mask', 'port', 'pool_id', 'virtualaddress_id', 'partition_id'
         ]
+    def create(self, validated_data):
+        return VirtualServer.objects.create(**validated_data)
 
 class VirtualAddressSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -168,6 +174,9 @@ class VirtualAddressSerializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'ip', 'node_id', 'ipaddress_id',
         ]
+    
+    def create(self, validated_data):
+        return VirtualAddress.objects.create(**validated_data)
 
 class Clusterf5Serializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -185,6 +194,9 @@ class Clusterf5Serializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name',
         ]
+    
+    def create(self, validated_data):
+        return Clusterf5.objects.create(**validated_data)
 
 class PartitionSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -203,6 +215,9 @@ class PartitionSerializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name', 'clusterf5_id',
         ]
+    
+    def create(self, validated_data):
+        return Partition.objects.create(**validated_data)
 
 class IruleSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -222,6 +237,9 @@ class IruleSerializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name', 'partition_id', 'definition',
         ]
+    
+    def create(self, validated_data):
+        return Irule.objects.create(**validated_data)
 
 class Devicef5Serializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -241,3 +259,6 @@ class Devicef5Serializer(serializers.Serializer):
         fields = [
             'id', 'url', 'display', 'name', 'device_id', 'clusterf5_id',
         ]
+    
+    def create(self, validated_data):
+        return Devicef5.objects.create(**validated_data)

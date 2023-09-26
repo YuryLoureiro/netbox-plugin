@@ -31,5 +31,7 @@ COPY . /source
 
 #RUN pip install -r requirements.txt
 RUN python setup.py develop
+RUN pip install  "rq==1.13.0"
+RUN pip install netmiko
 
 WORKDIR /opt/netbox/netbox/

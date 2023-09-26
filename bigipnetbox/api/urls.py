@@ -1,10 +1,9 @@
 from rest_framework import routers
 from .views import *
-from netbox.api import NetBoxRouter
 
 app_name = 'bigipnetbox-api'
 
-router = NetBoxRouter()
+router = routers.DefaultRouter()
 
 router.register('node', NodeViewSet)
 router.register('pool', PoolViewSet)
